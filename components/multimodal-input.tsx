@@ -292,15 +292,18 @@ function PureAttachmentsButton({
   fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
   status: UseChatHelpers['status'];
 }) {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   return (
     <Button
       data-testid="attachments-button"
       className="rounded-md rounded-bl-lg p-[8px] h-fit dark:border-primary hover:dark:bg-primary/20 hover:bg-primary/10 text-kid-friendly"
-      onClick={(event) => {
-        console.log("here")
-        event.preventDefault();
-        fileInputRef.current?.click();
-      }}
+      onClick={handleClick}
       disabled={status !== "ready"}
       variant="ghost"
     >
