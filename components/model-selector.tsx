@@ -42,13 +42,13 @@ export function ModelSelector({
         <Button
           data-testid="model-selector"
           variant="outline"
-          className="md:px-2 md:h-[34px]"
+          className="md:px-3 md:h-[38px] rounded-xl font-dubai text-lg shadow-sm bg-primary/5 border-primary/30"
         >
           {selectedChatModel?.name}
           <ChevronDownIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="min-w-[300px]">
+      <DropdownMenuContent align="start" className="min-w-[300px] rounded-xl font-dubai border-primary/30 shadow-md">
         {chatModels.map((chatModel) => {
           const { id } = chatModel;
 
@@ -72,8 +72,8 @@ export function ModelSelector({
                 className="gap-4 group/item flex flex-row justify-between items-center w-full"
               >
                 <div className="flex flex-col gap-1 items-start">
-                  <div>{chatModel.name}</div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-lg">{chatModel.name}</div>
+                  <div className="text-sm text-muted-foreground">
                     {chatModel.description}
                   </div>
                 </div>

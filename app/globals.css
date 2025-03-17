@@ -3,16 +3,17 @@
 @tailwind utilities;
 
 :root {
+    /* Light theme based on logo colors */
     --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 214, 219, 220;
-    --background-end-rgb: 255, 255, 255;
+    --background-start-rgb: 253, 247, 228;
+    --background-end-rgb: 255, 250, 235;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --foreground-rgb: 255, 255, 255;
-        --background-start-rgb: 0, 0, 0;
-        --background-end-rgb: 0, 0, 0;
+        --background-start-rgb: 0, 77, 57;
+        --background-end-rgb: 0, 92, 64;
     }
 }
 
@@ -20,77 +21,102 @@
     .text-balance {
         text-wrap: balance;
     }
+    
+    /* RTL Support for Arabic */
+    .rtl-support {
+        direction: rtl;
+        text-align: right;
+    }
+    
+    /* Larger font sizes for kids */
+    .text-kid-friendly {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+    }
+    
+    .text-kid-friendly-title {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
 }
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
-        --foreground: 240 10% 3.9%;
-        --card: 0 0% 100%;
-        --card-foreground: 240 10% 3.9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 240 10% 3.9%;
-        --primary: 240 5.9% 10%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 240 4.8% 95.9%;
-        --secondary-foreground: 240 5.9% 10%;
-        --muted: 240 4.8% 95.9%;
-        --muted-foreground: 240 3.8% 46.1%;
-        --accent: 240 4.8% 95.9%;
-        --accent-foreground: 240 5.9% 10%;
+        /* Logo-inspired color palette for light mode - emerald green and gold/cream */
+        --background: 49 38% 96%;
+        --foreground: 160 92% 12%;
+        --card: 48 38% 98%;
+        --card-foreground: 160 85% 14%;
+        --popover: 48 38% 98%;
+        --popover-foreground: 160 85% 14%;
+        --primary: 160 84% 22%;
+        --primary-foreground: 48 38% 98%;
+        --secondary: 48 30% 92%;
+        --secondary-foreground: 160 75% 18%;
+        --muted: 48 30% 92%;
+        --muted-foreground: 160 25% 30%;
+        --accent: 36 70% 80%;
+        --accent-foreground: 160 84% 22%;
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 0 0% 98%;
-        --border: 240 5.9% 90%;
-        --input: 240 5.9% 90%;
-        --ring: 240 10% 3.9%;
-        --chart-1: 12 76% 61%;
+        --border: 160 30% 86%;
+        --input: 160 30% 86%;
+        --ring: 160 84% 22%;
+        --chart-1: 160 76% 35%;
         --chart-2: 173 58% 39%;
         --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
-        --radius: 0.5rem;
-        --sidebar-background: 0 0% 98%;
-        --sidebar-foreground: 240 5.3% 26.1%;
-        --sidebar-primary: 240 5.9% 10%;
-        --sidebar-primary-foreground: 0 0% 98%;
-        --sidebar-accent: 240 4.8% 95.9%;
-        --sidebar-accent-foreground: 240 5.9% 10%;
-        --sidebar-border: 220 13% 91%;
-        --sidebar-ring: 217.2 91.2% 59.8%;
+        --chart-4: 36 74% 66%;
+        --chart-5: 48 80% 55%;
+        --radius: 1rem; /* Larger radius for kid-friendly rounded corners */
+        --sidebar-background: 48 38% 96%;
+        --sidebar-foreground: 160 75% 14%;
+        --sidebar-primary: 160 84% 22%;
+        --sidebar-primary-foreground: 48 38% 98%;
+        --sidebar-accent: 48 30% 92%;
+        --sidebar-accent-foreground: 160 75% 18%;
+        --sidebar-border: 48 20% 90%;
+        --sidebar-ring: 160 75% 40%;
+        
+        /* Font size variables */
+        --font-size-base: 1.125rem;
+        --font-size-lg: 1.25rem;
+        --font-size-xl: 1.5rem;
     }
+    
     .dark {
-        --background: 240 10% 3.9%;
-        --foreground: 0 0% 98%;
-        --card: 240 10% 3.9%;
-        --card-foreground: 0 0% 98%;
-        --popover: 240 10% 3.9%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 240 5.9% 10%;
-        --secondary: 240 3.7% 15.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 240 3.7% 15.9%;
-        --muted-foreground: 240 5% 64.9%;
-        --accent: 240 3.7% 15.9%;
-        --accent-foreground: 0 0% 98%;
+        /* Logo-inspired color palette for dark mode - deep emerald and gold accents */
+        --background: 160 80% 8%;
+        --foreground: 48 30% 95%;
+        --card: 160 70% 10%;
+        --card-foreground: 48 30% 95%;
+        --popover: 160 70% 10%;
+        --popover-foreground: 48 30% 95%;
+        --primary: 160 60% 45%;
+        --primary-foreground: 160 84% 8%;
+        --secondary: 160 40% 20%;
+        --secondary-foreground: 48 30% 95%;
+        --muted: 160 40% 20%;
+        --muted-foreground: 48 20% 80%;
+        --accent: 36 70% 60%;
+        --accent-foreground: 0 0% 100%;
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 0 0% 98%;
-        --border: 240 3.7% 15.9%;
-        --input: 240 3.7% 15.9%;
-        --ring: 240 4.9% 83.9%;
-        --chart-1: 220 70% 50%;
+        --border: 160 40% 22%;
+        --input: 160 40% 22%;
+        --ring: 160 60% 45%;
+        --chart-1: 160 70% 45%;
         --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
+        --chart-3: 36 70% 55%;
         --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
-        --sidebar-background: 240 5.9% 10%;
-        --sidebar-foreground: 240 4.8% 95.9%;
-        --sidebar-primary: 224.3 76.3% 48%;
+        --chart-5: 48 65% 60%;
+        --sidebar-background: 160 80% 6%;
+        --sidebar-foreground: 48 20% 90%;
+        --sidebar-primary: 160 60% 45%;
         --sidebar-primary-foreground: 0 0% 100%;
-        --sidebar-accent: 240 3.7% 15.9%;
-        --sidebar-accent-foreground: 240 4.8% 95.9%;
-        --sidebar-border: 240 3.7% 15.9%;
-        --sidebar-ring: 217.2 91.2% 59.8%;
+        --sidebar-accent: 160 40% 20%;
+        --sidebar-accent-foreground: 48 20% 90%;
+        --sidebar-border: 160 40% 20%;
+        --sidebar-ring: 160 60% 45%;
     }
 }
 
@@ -99,10 +125,45 @@
         @apply border-border;
     }
 
-    body {
-        @apply bg-background text-foreground;
+    html {
+        font-size: 16px; /* Base font size increased for better readability */
     }
 
+    body {
+        @apply bg-background text-foreground rtl-support;
+        font-size: var(--font-size-base);
+    }
+
+    /* Dubai font for Arabic */
+    @font-face {
+        font-family: "Dubai";
+        font-style: normal;
+        font-weight: 300;
+        src: url(/fonts/dubai/Dubai-300.woff2) format("woff2");
+    }
+
+    @font-face {
+        font-family: "Dubai";
+        font-style: normal;
+        font-weight: 400;
+        src: url(/fonts/dubai/Dubai-400.woff2) format("woff2");
+    }
+
+    @font-face {
+        font-family: "Dubai";
+        font-style: normal;
+        font-weight: 500;
+        src: url(/fonts/dubai/Dubai-500.woff2) format("woff2");
+    }
+
+    @font-face {
+        font-family: "Dubai";
+        font-style: normal;
+        font-weight: 700;
+        src: url(/fonts/dubai/Dubai-700.woff2) format("woff2");
+    }
+
+    /* Keep geist as fallback */
     @font-face {
         font-family: "geist";
         font-style: normal;
@@ -115,6 +176,25 @@
         font-style: normal;
         font-weight: 100 900;
         src: url(/fonts/geist-mono.woff2) format("woff2");
+    }
+    
+    /* Arabic number formatting */
+    .arabic-numbers {
+        font-feature-settings: "tnum" 1;
+    }
+    
+    /* Add decorative elements */
+    .arabic-decoration::before,
+    .arabic-decoration::after {
+        content: "☆";
+        display: inline-block;
+        padding: 0 0.5rem;
+        color: var(--primary);
+    }
+    
+    /* Kid-friendly button styles */
+    .btn-kid-friendly {
+        @apply rounded-full py-3 px-6 shadow-md transition-all duration-300 transform hover:scale-105 focus:ring-4 focus:ring-primary/30;
     }
 }
 

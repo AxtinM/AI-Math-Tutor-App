@@ -229,11 +229,11 @@ function PureMultimodalInput({
       <Textarea
         data-testid="multimodal-input"
         ref={textareaRef}
-        placeholder="Send a message..."
+        placeholder="اكتب سؤالك هنا..."
         value={input}
         onChange={handleInput}
         className={cx(
-          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-muted pb-10 dark:border-zinc-700',
+          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-lg bg-muted pb-10 dark:border-zinc-700 font-dubai',
           className,
         )}
         rows={2}
@@ -255,7 +255,7 @@ function PureMultimodalInput({
         }}
       />
 
-      <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start">
+      <div className="absolute bottom-0 right-10 p-2 w-fit flex flex-row justify-start">
         <AttachmentsButton fileInputRef={fileInputRef} status={status} />
       </div>
 
@@ -295,12 +295,13 @@ function PureAttachmentsButton({
   return (
     <Button
       data-testid="attachments-button"
-      className="rounded-md rounded-bl-lg p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200"
+      className="rounded-md rounded-bl-lg p-[8px] h-fit dark:border-primary hover:dark:bg-primary/20 hover:bg-primary/10 text-kid-friendly"
       onClick={(event) => {
+        console.log("here")
         event.preventDefault();
         fileInputRef.current?.click();
       }}
-      disabled={status !== 'ready'}
+      disabled={status !== "ready"}
       variant="ghost"
     >
       <PaperclipIcon size={14} />
@@ -320,7 +321,7 @@ function PureStopButton({
   return (
     <Button
       data-testid="stop-button"
-      className="rounded-full p-1.5 h-fit border dark:border-zinc-600"
+      className="rounded-full p-2 h-fit border border-primary bg-primary/10 hover:bg-primary/20 shadow-sm btn-kid-friendly"
       onClick={(event) => {
         event.preventDefault();
         stop();
@@ -346,7 +347,7 @@ function PureSendButton({
   return (
     <Button
       data-testid="send-button"
-      className="rounded-full p-1.5 h-fit border dark:border-zinc-600"
+      className="rounded-full p-2 h-fit border border-primary bg-primary/10 hover:bg-primary/20 shadow-sm btn-kid-friendly"
       onClick={(event) => {
         event.preventDefault();
         submitForm();

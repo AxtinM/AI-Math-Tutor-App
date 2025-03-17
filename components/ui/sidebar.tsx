@@ -34,6 +34,7 @@ type SidebarContext = {
   setOpenMobile: (open: boolean) => void;
   isMobile: boolean;
   toggleSidebar: () => void;
+  isRtl: boolean;
 };
 
 const SidebarContext = React.createContext<SidebarContext | null>(null);
@@ -69,6 +70,12 @@ const SidebarProvider = React.forwardRef<
   ) => {
     const isMobile = useIsMobile();
     const [openMobile, setOpenMobile] = React.useState(false);
+    const [isRtl, setIsRtl] = React.useState(false);
+
+    // Detect RTL direction
+    React.useEffect(() => {
+      setIsRtl(document.documentElement.dir === 'rtl');
+    }, []);
 
     // This is the internal state of the sidebar.
     // We use openProp and setOpenProp for control from outside the component.
@@ -125,6 +132,7 @@ const SidebarProvider = React.forwardRef<
         openMobile,
         setOpenMobile,
         toggleSidebar,
+        isRtl,
       }),
       [
         state,
@@ -134,6 +142,7 @@ const SidebarProvider = React.forwardRef<
         openMobile,
         setOpenMobile,
         toggleSidebar,
+        isRtl,
       ],
     );
 
@@ -183,7 +192,14 @@ const Sidebar = React.forwardRef<
     },
     ref,
   ) => {
-    const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+    const { isMobile, state, openMobile, setOpenMobile, isRtl } = useSidebar();
+
+    // Logic to handle side based on RTL context
+    const effectiveSide = React.useMemo(() => {
+      if (isRtl && side === 'left') return 'right';
+      if (isRtl && side === 'right') return 'left';
+      return side;
+    }, [isRtl, side]);
 
     if (collapsible === 'none') {
       return (
@@ -227,14 +243,13 @@ const Sidebar = React.forwardRef<
         data-state={state}
         data-collapsible={state === 'collapsed' ? collapsible : ''}
         data-variant={variant}
-        data-side={side}
+        data-side={effectiveSide}
       >
         {/* This is what handles the sidebar gap on desktop */}
         <div
           className={cn(
             'duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear',
             'group-data-[collapsible=offcanvas]:w-0',
-            'group-data-[side=right]:rotate-180',
             variant === 'floating' || variant === 'inset'
               ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]'
               : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon]',
@@ -242,10 +257,11 @@ const Sidebar = React.forwardRef<
         />
         <div
           className={cn(
-            'duration-200 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex',
-            side === 'left'
-              ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
-              : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
+            'duration-300 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] md:flex',
+            // New transform-based transition for both LTR and RTL
+            effectiveSide === 'left'
+              ? 'left-0 transition-[transform,width] ease-out group-data-[collapsible=offcanvas]:transform group-data-[collapsible=offcanvas]:-translate-x-full'
+              : 'right-0 transition-[transform,width] ease-out group-data-[collapsible=offcanvas]:transform group-data-[collapsible=offcanvas]:translate-x-full',
             // Adjust the padding for floating and inset variants.
             variant === 'floating' || variant === 'inset'
               ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]'
@@ -271,7 +287,7 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, isRtl } = useSidebar();
 
   return (
     <Button
@@ -279,7 +295,12 @@ const SidebarTrigger = React.forwardRef<
       data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn('h-7 w-7', className)}
+      className={cn(
+        'h-8 w-8 rounded-xl',
+        // Flip the icon for RTL
+        isRtl && 'rotate-180',
+        className
+      )}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
@@ -462,6 +483,7 @@ const SidebarGroupAction = React.forwardRef<
   React.ComponentProps<'button'> & { asChild?: boolean }
 >(({ className, asChild = false, ...props }, ref) => {
   const Comp = asChild ? Slot : 'button';
+  const { isRtl } = useSidebar();
 
   return (
     <Comp
@@ -472,6 +494,8 @@ const SidebarGroupAction = React.forwardRef<
         // Increases the hit area of the button on mobile.
         'after:absolute after:-inset-2 after:md:hidden',
         'group-data-[collapsible=icon]:hidden',
+        // Reposition for RTL
+        isRtl && 'right-auto left-3',
         className,
       )}
       {...props}
@@ -562,7 +586,7 @@ const SidebarMenuButton = React.forwardRef<
     ref,
   ) => {
     const Comp = asChild ? Slot : 'button';
-    const { isMobile, state } = useSidebar();
+    const { isMobile, state, isRtl } = useSidebar();
 
     const button = (
       <Comp
@@ -589,7 +613,7 @@ const SidebarMenuButton = React.forwardRef<
       <Tooltip>
         <TooltipTrigger asChild>{button}</TooltipTrigger>
         <TooltipContent
-          side="right"
+          side={isRtl ? "left" : "right"}
           align="center"
           hidden={state !== 'collapsed' || isMobile}
           {...tooltip}
@@ -608,6 +632,7 @@ const SidebarMenuAction = React.forwardRef<
   }
 >(({ className, asChild = false, showOnHover = false, ...props }, ref) => {
   const Comp = asChild ? Slot : 'button';
+  const { isRtl } = useSidebar();
 
   return (
     <Comp
@@ -621,8 +646,10 @@ const SidebarMenuAction = React.forwardRef<
         'peer-data-[size=default]/menu-button:top-1.5',
         'peer-data-[size=lg]/menu-button:top-2.5',
         'group-data-[collapsible=icon]:hidden',
+        // RTL positioning
+        isRtl && 'right-auto left-1',
         showOnHover &&
-          'group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0',
+        'group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0',
         className,
       )}
       {...props}
@@ -634,22 +661,28 @@ SidebarMenuAction.displayName = 'SidebarMenuAction';
 const SidebarMenuBadge = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<'div'>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    data-sidebar="menu-badge"
-    className={cn(
-      'absolute right-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums text-sidebar-foreground select-none pointer-events-none',
-      'peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
-      'peer-data-[size=sm]/menu-button:top-1',
-      'peer-data-[size=default]/menu-button:top-1.5',
-      'peer-data-[size=lg]/menu-button:top-2.5',
-      'group-data-[collapsible=icon]:hidden',
-      className,
-    )}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  const { isRtl } = useSidebar();
+
+  return (
+    <div
+      ref={ref}
+      data-sidebar="menu-badge"
+      className={cn(
+        'absolute right-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums text-sidebar-foreground select-none pointer-events-none',
+        'peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
+        'peer-data-[size=sm]/menu-button:top-1',
+        'peer-data-[size=default]/menu-button:top-1.5',
+        'peer-data-[size=lg]/menu-button:top-2.5',
+        'group-data-[collapsible=icon]:hidden',
+        // RTL positioning
+        isRtl && 'right-auto left-1',
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 SidebarMenuBadge.displayName = 'SidebarMenuBadge';
 
 const SidebarMenuSkeleton = React.forwardRef<
@@ -693,18 +726,24 @@ SidebarMenuSkeleton.displayName = 'SidebarMenuSkeleton';
 const SidebarMenuSub = React.forwardRef<
   HTMLUListElement,
   React.ComponentProps<'ul'>
->(({ className, ...props }, ref) => (
-  <ul
-    ref={ref}
-    data-sidebar="menu-sub"
-    className={cn(
-      'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5',
-      'group-data-[collapsible=icon]:hidden',
-      className,
-    )}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  const { isRtl } = useSidebar();
+
+  return (
+    <ul
+      ref={ref}
+      data-sidebar="menu-sub"
+      className={cn(
+        'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5',
+        'group-data-[collapsible=icon]:hidden',
+        // RTL border placement
+        isRtl && 'border-l-0 border-r',
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 SidebarMenuSub.displayName = 'SidebarMenuSub';
 
 const SidebarMenuSubItem = React.forwardRef<
@@ -722,6 +761,7 @@ const SidebarMenuSubButton = React.forwardRef<
   }
 >(({ asChild = false, size = 'md', isActive, className, ...props }, ref) => {
   const Comp = asChild ? Slot : 'a';
+  const { isRtl } = useSidebar();
 
   return (
     <Comp
@@ -734,7 +774,7 @@ const SidebarMenuSubButton = React.forwardRef<
         'data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground',
         size === 'sm' && 'text-xs',
         size === 'md' && 'text-sm',
-        'group-data-[collapsible=icon]:hidden',
+        isRtl && '-translate-x-0 translate-x-px',
         className,
       )}
       {...props}

@@ -1,18 +1,36 @@
 import type { Metadata } from 'next';
 import { Toaster } from 'sonner';
+import Script from 'next/script';
 
 import { ThemeProvider } from '@/components/theme-provider';
+import DecorativePattern from '@/components/decorative-pattern';
+import PWAInstallPrompt from '@/components/pwa-install-prompt';
+import ServiceWorkerRegistration from '@/components/service-worker-registration';
 
 import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chat.vercel.ai'),
-  title: 'Next.js Chatbot Template',
-  description: 'Next.js chatbot template using the AI SDK.',
+  title: 'مساعد الرياضيات - Math Tutor',
+  description: 'معلم الرياضيات الذكي للأطفال العرب',
+  // The manifest is now defined in app/manifest.ts
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Math Tutor',
+  },
+  applicationName: 'Math Tutor',
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export const viewport = {
   maximumScale: 1, // Disable auto-zoom on mobile Safari
+  width: 'device-width',
+  initialScale: 1,
+  minimumScale: 1,
+  userScalable: false,
 };
 
 const LIGHT_THEME_COLOR = 'hsl(0 0% 100%)';
@@ -42,7 +60,8 @@ export default async function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ar"
+      dir="rtl"
       // `next-themes` injects an extra classname to the body element to avoid
       // visual flicker before hydration. Hence the `suppressHydrationWarning`
       // prop is necessary to avoid the React hydration mismatch warning.
@@ -55,8 +74,10 @@ export default async function RootLayout({
             __html: THEME_COLOR_SCRIPT,
           }}
         />
+        {/* manifest.json is now handled by app/manifest.ts */}
       </head>
-      <body className="antialiased">
+      <body className="antialiased font-dubai">
+        <Script src="/worker-register.js" strategy="beforeInteractive" />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -64,7 +85,13 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <Toaster position="top-center" />
-          {children}
+          <DecorativePattern />
+          <div className="font-dubai">
+            {children}
+          </div>
+          {/* PWA components */}
+          <PWAInstallPrompt />
+          <ServiceWorkerRegistration />
         </ThemeProvider>
       </body>
     </html>

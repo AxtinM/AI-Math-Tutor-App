@@ -16,31 +16,31 @@ interface SuggestedActionsProps {
 function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
   const suggestedActions = [
     {
-      title: 'What are the advantages',
-      label: 'of using Next.js?',
-      action: 'What are the advantages of using Next.js?',
+      title: 'مسائل الجمع والطرح',
+      label: 'كيف أحسب 24 + 18؟',
+      action: 'كيف أحسب 24 + 18؟',
     },
     {
-      title: 'Write code to',
-      label: `demonstrate djikstra's algorithm`,
-      action: `Write code to demonstrate djikstra's algorithm`,
+      title: 'مسائل الضرب',
+      label: 'اشرح لي جدول الضرب من 1 إلى 10',
+      action: 'اشرح لي جدول الضرب من 1 إلى 10',
     },
     {
-      title: 'Help me write an essay',
-      label: `about silicon valley`,
-      action: `Help me write an essay about silicon valley`,
+      title: 'الكسور',
+      label: 'كيف أجمع الكسور المختلفة؟',
+      action: 'كيف أجمع الكسور المختلفة؟',
     },
     {
-      title: 'What is the weather',
-      label: 'in San Francisco?',
-      action: 'What is the weather in San Francisco?',
+      title: 'الأشكال الهندسية',
+      label: 'ما هي أنواع المثلثات؟',
+      action: 'ما هي أنواع المثلثات؟',
     },
   ];
 
   return (
     <div
       data-testid="suggested-actions"
-      className="grid sm:grid-cols-2 gap-2 w-full"
+      className="grid sm:grid-cols-2 gap-3 w-full"
     >
       {suggestedActions.map((suggestedAction, index) => (
         <motion.div
@@ -61,9 +61,9 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
                 content: suggestedAction.action,
               });
             }}
-            className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start"
+            className="text-right border border-primary/30 bg-primary/5 hover:bg-primary/10 rounded-2xl px-4 py-4 text-md flex-1 gap-2 sm:flex-col w-full h-auto justify-start items-start font-dubai shadow-sm"
           >
-            <span className="font-medium">{suggestedAction.title}</span>
+            <span className="font-medium text-lg arabic-decoration">{suggestedAction.title}</span>
             <span className="text-muted-foreground">
               {suggestedAction.label}
             </span>

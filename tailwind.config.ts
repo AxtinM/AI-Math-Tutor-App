@@ -9,8 +9,9 @@ const config: Config = {
   ],
   theme: {
     fontFamily: {
-      sans: ['geist'],
-      mono: ['geist-mono'],
+      sans: ['Dubai', 'geist', 'sans-serif'],
+      mono: ['geist-mono', 'monospace'],
+      dubai: ['Dubai', 'sans-serif'],
     },
     extend: {
       screens: {

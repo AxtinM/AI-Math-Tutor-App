@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Test Page</title>
+    <link rel="manifest" href="/manifest">
+    <!-- Apple PWA meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Math Tutor">
+    <link rel="apple-touch-icon" href="/images/math_tutor_ico.png">
+    <!-- Theme color -->
+    <meta name="theme-color" content="#ffffff">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .success { color: green; }
+        .warning { color: orange; }
+        .error { color: red; }
+        .diagnostic-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>PWA Test Page</h1>
+    <p>This page tests if the PWA manifest and service worker are working correctly.</p>
+    
+    <h2>Manifest Status</h2>
+    <div id="manifest-status">Checking manifest...</div>
+    
+    <h2>Service Worker Status</h2>
+    <div id="sw-status">Checking service worker...</div>
+    
+    <script>
+        // Utility function to log with timestamps
+        function logWithTime(message, type = 'info') {
+            const timestamp = new Date().toTimeString().split(' ')[0];
+            console[type](`[${timestamp}] ${message}`);
+        }
+
+        // Enhanced manifest checking
+        const manifestLink = document.querySelector('link[rel="manifest"]');
+        const manifestStatus = document.getElementById('manifest-status');
+        
+        if (manifestLink) {
+            logWithTime('Checking manifest at: ' + manifestLink.href);
+            
+            // First try with manual redirect handling
+            fetch(manifestLink.href, { redirect: 'manual' })
+                .then(initialResponse => {
+                    if (initialResponse.type === 'opaqueredirect') {
+                        manifestStatus.innerHTML = '⚠️ <span class="warning">Manifest is being redirected (307). This could cause issues.</span>';
+                        
+                        // Try again with normal fetch to follow redirects
+                        return fetch(manifestLink.href)
+                            .then(followUpResponse => {
+                                if (followUpResponse.ok) {
+                                    manifestStatus.innerHTML += '<br>✅ <span class="success">But manifest content was eventually loaded after redirect.</span>';
+                                    logWithTime('Manifest loaded after redirect', 'info');
+                                    return followUpResponse.json();
+                                } else {
+                                    manifestStatus.innerHTML += '<br>❌ <span class="error">Failed to load manifest after redirect: ' + followUpResponse.status + '</span>';
+                                    logWithTime('Failed to load manifest after redirect: ' + followUpResponse.status, 'error');
+                                    throw new Error('Failed to load manifest after redirect');
+                                }
+                            });
+                    } else if (initialResponse.ok) {
+                        manifestStatus.innerHTML = '✅ <span class="success">Manifest loaded successfully without redirects!</span>';
+                        logWithTime('Manifest loaded successfully', 'info');
+                        return initialResponse.json();
+                    } else {
+                        manifestStatus.innerHTML = '❌ <span class="error">Failed to load manifest: ' + initialResponse.status + '</span>';
+                        logWithTime('Failed to load manifest: ' + initialResponse.status, 'error');
+                        throw new Error('Failed to load manifest');
+                    }
+                })
+                .then(data => {
+                    if (data) {
+                        console.log('Manifest content:', data);
+                        const details = document.createElement('pre');
+                        details.textContent = JSON.stringify(data, null, 2);
+                        manifestStatus.appendChild(document.createElement('br'));
+                        manifestStatus.appendChild(details);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading manifest:', error);
+                    if (!manifestStatus.innerHTML.includes('Error')) {
+                        manifestStatus.innerHTML += '<br>❌ <span class="error">Error: ' + error.message + '</span>';
+                    }
+                });
+        } else {
+            manifestStatus.textContent = '❌ No manifest link found in HTML';
+        }
+        
+        // Check if service worker is registered
+        const swStatus = document.getElementById('sw-status');
+        
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations()
+                .then(registrations => {
+                    if (registrations.length > 0) {
+                        swStatus.innerHTML = '✅ <span class="success">Service worker registered!</span>';
+                        registrations.forEach((registration, i) => {
+                            const details = document.createElement('div');
+                            details.textContent = `Registration ${i+1}: Scope = ${registration.scope}`;
+                            const state = registration.active ? 'active' : 
+                                          registration.installing ? 'installing' : 
+                                          registration.waiting ? 'waiting' : 'unknown';
+                            details.textContent += ` (State: ${state})`;
+                            swStatus.appendChild(details);
+                        });
+                    } else {
+                        swStatus.innerHTML = '❌ <span class="error">No service worker registrations found</span>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking service worker:', error);
+                    swStatus.innerHTML = '❌ <span class="error">Error checking service worker: ' + error.message + '</span>';
+                });
+        } else {
+            swStatus.innerHTML = '❌ <span class="error">Service Workers not supported in this browser</span>';
+        }
+
+        // Add diagnostic info about file redirects
+        window.addEventListener('load', () => {
+            // Check for app-build-manifest.json
+            fetch('/_next/app-build-manifest.json')
+                .then(response => {
+                    console.log('app-build-manifest.json status:', response.status);
+                })
+                .catch(err => {
+                    console.warn('app-build-manifest.json check failed:', err);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -6,7 +6,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { memo, useState } from 'react';
 import type { Vote } from '@/lib/db/schema';
 import { DocumentToolCall, DocumentToolResult } from './document';
-import { PencilEditIcon, SparklesIcon } from './icons';
+import { PencilEditIcon } from './icons';
+import MathTutorAvatar from './math-tutor-avatar';
 import { Markdown } from './markdown';
 import { MessageActions } from './message-actions';
 import { PreviewAttachment } from './preview-attachment';
@@ -61,10 +62,8 @@ const PurePreviewMessage = ({
           )}
         >
           {message.role === 'assistant' && (
-            <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border bg-background">
-              <div className="translate-y-px">
-                <SparklesIcon size={14} />
-              </div>
+            <div className="size-10 flex items-center rounded-full justify-center shrink-0">
+              <MathTutorAvatar size={50} />
             </div>
           )}
 
@@ -109,14 +108,16 @@ const PurePreviewMessage = ({
                         <PencilEditIcon />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>Edit message</TooltipContent>
+                    <TooltipContent>تعديل الرسالة</TooltipContent>
                   </Tooltip>
                 )}
 
                 <div
-                  className={cn('flex flex-col gap-4', {
-                    'bg-primary text-primary-foreground px-3 py-2 rounded-xl':
+                  className={cn('flex flex-col gap-4 font-dubai text-lg', {
+                    'bg-primary text-primary-foreground px-6 py-3 rounded-2xl shadow-md':
                       message.role === 'user',
+                    'bg-accent/10 px-8 py-4 rounded-2xl shadow-sm': 
+                      message.role === 'assistant',
                   })}
                 >
                   <Markdown>{message.content as string}</Markdown>
@@ -258,13 +259,13 @@ export const ThinkingMessage = () => {
           },
         )}
       >
-        <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
-          <SparklesIcon size={14} />
+        <div className="size-10 flex items-center rounded-full justify-center shrink-0">
+          <MathTutorAvatar size={50} />
         </div>
 
         <div className="flex flex-col gap-2 w-full">
-          <div className="flex flex-col gap-4 text-muted-foreground">
-            Thinking...
+          <div className="flex flex-col gap-4 text-muted-foreground font-dubai text-lg">
+            جاري التفكير...
           </div>
         </div>
       </div>

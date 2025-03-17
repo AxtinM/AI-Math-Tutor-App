@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import MathTutorAvatar from './math-tutor-avatar';
 
 export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
@@ -34,8 +35,11 @@ export function AppSidebar({ user }: { user: User | undefined }) {
               }}
               className="flex flex-row gap-3 items-center"
             >
-              <span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">
-                Chatbot
+              <div className="ml-1">
+                <MathTutorAvatar size={30} />
+              </div>
+              <span className="text-xl font-dubai font-semibold px-2 hover:bg-primary/10 rounded-xl cursor-pointer">
+                معلم الرياضيات
               </span>
             </Link>
             <Tooltip>
@@ -43,7 +47,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                 <Button
                   variant="ghost"
                   type="button"
-                  className="p-2 h-fit"
+                  className="p-2 h-fit rounded-xl hover:bg-primary/10"
                   onClick={() => {
                     setOpenMobile(false);
                     router.push('/');
@@ -53,7 +57,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                   <PlusIcon />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent align="end">New Chat</TooltipContent>
+              <TooltipContent align="end">محادثة جديدة</TooltipContent>
             </Tooltip>
           </div>
         </SidebarMenu>
