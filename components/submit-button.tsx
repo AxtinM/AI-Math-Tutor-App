@@ -5,6 +5,7 @@ import { useFormStatus } from 'react-dom';
 import { LoaderIcon } from '@/components/icons';
 
 import { Button } from './ui/button';
+import { useRouter } from 'next/navigation';
 
 export function SubmitButton({
   children,
@@ -14,6 +15,7 @@ export function SubmitButton({
   isSuccessful: boolean;
 }) {
   const { pending } = useFormStatus();
+  const router = useRouter()
 
   return (
     <Button

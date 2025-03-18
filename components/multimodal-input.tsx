@@ -23,7 +23,8 @@ import { useLocalStorage, useWindowSize } from 'usehooks-ts';
 
 import { sanitizeUIMessages } from '@/lib/utils';
 
-import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons';
+import { ArrowUpIcon, CameraIcon, PaperclipIcon, StopIcon } from './icons';
+import { CameraModal } from './camera-modal';
 import { PreviewAttachment } from './preview-attachment';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
@@ -109,6 +110,7 @@ function PureMultimodalInput({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
 
   const submitForm = useCallback(() => {
     window.history.replaceState({}, '', `/chat/${chatId}`);
@@ -186,8 +188,51 @@ function PureMultimodalInput({
     [setAttachments],
   );
 
+  // Handle captured image from camera
+  const handleCapturedImage = useCallback(
+    async (file: File) => {
+      // Prevent any form submission behavior
+      return new Promise<void>((resolve) => {
+        setUploadQueue([file.name]);
+        
+        try {
+          uploadFile(file).then(attachment => {
+            if (attachment) {
+              setAttachments((currentAttachments) => [
+                ...currentAttachments,
+                attachment,
+              ]);
+            }
+            
+            // Clear the upload queue and resolve the promise
+            setUploadQueue([]);
+            resolve();
+          }).catch(error => {
+            console.error('Error uploading captured image:', error);
+            setUploadQueue([]);
+            resolve();
+          });
+        } catch (error) {
+          console.error('Error handling captured image:', error);
+          setUploadQueue([]);
+          resolve();
+        }
+      });
+    },
+    [uploadFile, setAttachments],
+  );
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent the default form submission
+    if (status === 'ready') {
+      submitForm();
+    } else {
+      toast.error('Please wait for the model to finish its response!');
+    }
+  };
+
   return (
-    <div className="relative w-full flex flex-col gap-4">
+    <div className="relative w-full flex flex-col gap-4" onClick={(e) => e.stopPropagation()}>
       {messages.length === 0 &&
         attachments.length === 0 &&
         uploadQueue.length === 0 && (
@@ -255,11 +300,25 @@ function PureMultimodalInput({
         }}
       />
 
-      <div className="absolute bottom-0 right-10 p-2 w-fit flex flex-row justify-start">
+      {/* Camera Modal */}
+      <CameraModal 
+        isOpen={isCameraModalOpen}
+        onClose={() => setIsCameraModalOpen(false)}
+        onCapture={handleCapturedImage}
+      />
+
+      <div className="absolute bottom-0 right-10 p-2 w-fit flex flex-row justify-start gap-1" onClick={(e) => e.stopPropagation()}>
+        <CameraButton 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsCameraModalOpen(true);
+          }} 
+          status={status} 
+        />
         <AttachmentsButton fileInputRef={fileInputRef} status={status} />
       </div>
-
-      <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
+      <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end" onClick={(e) => e.stopPropagation()}>
         {status === 'submitted' ? (
           <StopButton stop={stop} setMessages={setMessages} />
         ) : (
@@ -294,6 +353,7 @@ function PureAttachmentsButton({
 }) {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    event.stopPropagation();
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -306,12 +366,35 @@ function PureAttachmentsButton({
       onClick={handleClick}
       disabled={status !== "ready"}
       variant="ghost"
+      type="button"
     >
       <PaperclipIcon size={14} />
     </Button>
   );
 }
 
+function PureCameraButton({
+  onClick,
+  status,
+}: {
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  status: UseChatHelpers['status'];
+}) {
+  return (
+    <Button
+      data-testid="camera-button"
+      className="rounded-md rounded-bl-lg p-[8px] h-fit dark:border-primary hover:dark:bg-primary/20 hover:bg-primary/10 text-kid-friendly"
+      onClick={onClick}
+      disabled={status !== "ready"}
+      variant="ghost"
+      type="button"
+    >
+      <CameraIcon size={18} />
+    </Button>
+  );
+}
+
+const CameraButton = memo(PureCameraButton);
 const AttachmentsButton = memo(PureAttachmentsButton);
 
 function PureStopButton({

@@ -30,6 +30,12 @@ export const fetcher = async (url: string) => {
 
     error.info = await res.json();
     error.status = res.status;
+    
+    // If status is 401 Unauthorized, redirect to login page
+    if (res.status === 401) {
+      // Use window.location to force a full page redirect to the login page
+      window.location.href = '/login';
+    }
 
     throw error;
   }

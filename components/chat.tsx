@@ -49,8 +49,15 @@ export function Chat({
     onFinish: () => {
       mutate('/api/history');
     },
-    onError: () => {
-      toast.error('An error occured, please try again!');
+    onError: (error) => {
+      // Check if it's a 401 error (will be redirected by fetcher)
+      const err = error as any;
+      if (err?.status === 401) {
+        // Don't show toast as we're redirecting
+        return;
+      }
+      // Display Arabic error message
+      toast.error('حدث خطأ، يرجى المحاولة مرة أخرى!');
     },
   });
 
