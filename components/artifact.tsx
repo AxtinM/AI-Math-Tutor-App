@@ -8,6 +8,7 @@ import {
   useCallback,
   useEffect,
   useState,
+  useLayoutEffect,
 } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { useDebounceCallback, useWindowSize } from 'usehooks-ts';
@@ -100,6 +101,18 @@ function PureArtifact({
   const [currentVersionIndex, setCurrentVersionIndex] = useState(-1);
 
   const { open: isSidebarOpen } = useSidebar();
+  
+  // Track RTL direction
+  const [isRTL, setIsRTL] = useState(false);
+  
+  // Check document direction on initial render
+  useLayoutEffect(() => {
+    // Check if the page is in RTL mode
+    const dir = window.document.documentElement.dir || 
+                window.document.dir || 
+                'ltr';
+    setIsRTL(dir === 'rtl');
+  }, []);
 
   useEffect(() => {
     if (documents && documents.length > 0) {
@@ -256,7 +269,7 @@ function PureArtifact({
       {artifact.isVisible && (
         <motion.div
           data-testid="artifact"
-          className="flex flex-row h-dvh w-dvw fixed top-0 left-0 z-50 bg-transparent"
+          className="flex flex-row h-dvh w-dvw fixed top-0 left-0 z-50 bg-transparent rtl-support"
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { delay: 0.4 } }}
@@ -266,12 +279,18 @@ function PureArtifact({
               className="fixed bg-background h-dvh"
               initial={{
                 width: isSidebarOpen ? windowWidth - 256 : windowWidth,
-                right: 0,
+                right: isRTL ? 'auto' : 0,
+                left: isRTL ? 0 : 'auto',
               }}
-              animate={{ width: windowWidth, right: 0 }}
+              animate={{ 
+                width: windowWidth, 
+                right: isRTL ? 'auto' : 0,
+                left: isRTL ? 0 : 'auto',
+              }}
               exit={{
                 width: isSidebarOpen ? windowWidth - 256 : windowWidth,
-                right: 0,
+                right: isRTL ? 'auto' : 0,
+                left: isRTL ? 0 : 'auto',
               }}
             />
           )}
@@ -279,7 +298,11 @@ function PureArtifact({
           {!isMobile && (
             <motion.div
               className="relative w-[400px] bg-muted dark:bg-background h-dvh shrink-0"
-              initial={{ opacity: 0, x: 10, scale: 1 }}
+              initial={{ 
+                opacity: 0, 
+                x: isRTL ? -10 : 10, 
+                scale: 1 
+              }}
               animate={{
                 opacity: 1,
                 x: 0,
@@ -309,7 +332,7 @@ function PureArtifact({
                 )}
               </AnimatePresence>
 
-              <div className="flex flex-col h-full justify-between items-center gap-4">
+              <div className="flex flex-col h-full justify-between items-center gap-4 rtl-support">
                 <ArtifactMessages
                   chatId={chatId}
                   status={status}
@@ -342,7 +365,7 @@ function PureArtifact({
           )}
 
           <motion.div
-            className="fixed dark:bg-muted bg-background h-dvh flex flex-col overflow-y-scroll md:border-l dark:border-zinc-700 border-zinc-200"
+            className="fixed dark:bg-muted bg-background h-dvh flex flex-col overflow-y-scroll md:border-l dark:border-zinc-700 border-zinc-200 rtl-support"
             initial={
               isMobile
                 ? {
@@ -381,7 +404,7 @@ function PureArtifact({
                   }
                 : {
                     opacity: 1,
-                    x: 400,
+                    x: isRTL ? -400 : 400,
                     y: 0,
                     height: windowHeight,
                     width: windowWidth
@@ -408,8 +431,8 @@ function PureArtifact({
               },
             }}
           >
-            <div className="p-2 flex flex-row justify-between items-start">
-              <div className="flex flex-row gap-4 items-start">
+            <div className="p-2 flex flex-row justify-between items-start rtl-flex">
+              <div className="flex rtl-flex gap-4 items-start">
                 <ArtifactCloseButton />
 
                 <div className="flex flex-col">

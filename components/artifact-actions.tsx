@@ -1,7 +1,8 @@
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { artifactDefinitions, UIArtifact } from './artifact';
-import { Dispatch, memo, SetStateAction, useState } from 'react';
+import { Dispatch, memo, SetStateAction, useState, useLayoutEffect } from 'react';
+import { getDocumentDirection } from '@/lib/utils/rtl-helpers';
 import { ArtifactActionContext } from './create-artifact';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -26,6 +27,22 @@ function PureArtifactActions({
   setMetadata,
 }: ArtifactActionsProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isRTL, setIsRTL] = useState(false);
+  
+  // Check document direction on initial render and when it changes
+  useLayoutEffect(() => {
+    // Set initial RTL state
+    setIsRTL(getDocumentDirection() === 'rtl');
+    
+    // Listen for direction changes
+    const handleDirectionChange = (e: Event) => {
+      const event = e as CustomEvent;
+      setIsRTL(event.detail.direction === 'rtl');
+    };
+    
+    document.addEventListener('directionchange', handleDirectionChange);
+    return () => document.removeEventListener('directionchange', handleDirectionChange);
+  }, []);
 
   const artifactDefinition = artifactDefinitions.find(
     (definition) => definition.kind === artifact.kind,
@@ -46,7 +63,7 @@ function PureArtifactActions({
   };
 
   return (
-    <div className="flex flex-row gap-1">
+    <div className={`flex flex-row gap-1 ${isRTL ? 'rtl-mirror' : ''}`}>
       {artifactDefinition.actions.map((action) => (
         <Tooltip key={action.description}>
           <TooltipTrigger asChild>
@@ -75,7 +92,9 @@ function PureArtifactActions({
                     : false
               }
             >
-              {action.icon}
+              <span className={isRTL && action.shouldMirrorInRTL ? 'rtl-flip-x' : ''}>
+                {action.icon}
+              </span>
               {action.label}
             </Button>
           </TooltipTrigger>

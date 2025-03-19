@@ -47,14 +47,15 @@ const PurePreviewMessage = ({
     <AnimatePresence>
       <motion.div
         data-testid={`message-${message.role}`}
-        className="w-full mx-auto max-w-3xl px-4 group/message"
+        className="w-full mx-auto max-w-3xl px-2 sm:px-4 group/message"
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         data-role={message.role}
       >
         <div
           className={cn(
-            'flex gap-4 w-full group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl',
+            'flex gap-4 w-full rtl-mirror',
+            message.role === 'user' ? 'justify-start' : 'justify-end',
             {
               'w-full': mode === 'edit',
               'group-data-[role=user]/message:w-fit': mode !== 'edit',
@@ -113,14 +114,14 @@ const PurePreviewMessage = ({
                 )}
 
                 <div
-                  className={cn('flex flex-col gap-4 font-dubai text-lg', {
-                    'bg-primary text-primary-foreground px-6 py-3 rounded-2xl shadow-md':
+                  className={cn('flex flex-col gap-4 font-dubai text-lg rtl-force', {
+                    'bg-primary text-primary-foreground px-4 sm:px-6 py-2 sm:py-3 rounded-2xl shadow-md':
                       message.role === 'user',
-                    'bg-accent/10 px-8 py-4 rounded-2xl shadow-sm': 
+                    'bg-accent/10 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-sm overflow-hidden': 
                       message.role === 'assistant',
                   })}
                 >
-                  <Markdown>{message.content as string}</Markdown>
+                  <Markdown dir="rtl">{message.content as string}</Markdown>
                 </div>
               </div>
             )}
@@ -246,25 +247,18 @@ export const ThinkingMessage = () => {
   return (
     <motion.div
       data-testid="message-assistant-loading"
-      className="w-full mx-auto max-w-3xl px-4 group/message "
+      className="w-full mx-auto max-w-3xl px-2 sm:px-4 group/message"
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1, transition: { delay: 1 } }}
       data-role={role}
     >
-      <div
-        className={cx(
-          'flex gap-4 group-data-[role=user]/message:px-3 w-full group-data-[role=user]/message:w-fit group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:py-2 rounded-xl',
-          {
-            'group-data-[role=user]/message:bg-muted': true,
-          },
-        )}
-      >
+      <div className="flex gap-4 rtl-mirror w-full justify-end rounded-xl">
         <div className="size-10 flex items-center rounded-full justify-center shrink-0">
           <MathTutorAvatar size={50} />
         </div>
 
         <div className="flex flex-col gap-2 w-full">
-          <div className="flex flex-col gap-4 text-muted-foreground font-dubai text-lg">
+          <div className="flex flex-col gap-4 text-muted-foreground font-dubai text-lg rtl-force">
             جاري التفكير...
           </div>
         </div>

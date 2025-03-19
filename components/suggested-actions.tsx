@@ -61,7 +61,8 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
                 content: suggestedAction.action,
               });
             }}
-            className="text-right border border-primary/30 bg-primary/5 hover:bg-primary/10 rounded-2xl px-4 py-4 text-md flex-1 gap-2 sm:flex-col w-full h-auto justify-start items-start font-dubai shadow-sm"
+            className="text-right border border-primary/30 bg-primary/5 hover:bg-primary/10 rounded-2xl px-4 py-4 text-md flex-1 gap-2 sm:flex-col w-full h-auto justify-start items-start font-dubai shadow-sm rtl-force"
+            dir="rtl"
           >
             <span className="font-medium text-lg arabic-decoration">{suggestedAction.title}</span>
             <span className="text-muted-foreground">

@@ -20,6 +20,7 @@ type ArtifactAction<M = any> = {
   description: string;
   onClick: (context: ArtifactActionContext<M>) => Promise<void> | void;
   isDisabled?: (context: ArtifactActionContext<M>) => boolean;
+  shouldMirrorInRTL?: boolean; // Whether icon should be flipped in RTL mode
 };
 
 export type ArtifactToolbarContext = {

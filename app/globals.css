@@ -28,6 +28,113 @@
         text-align: right;
     }
     
+    /* Enhanced RTL support for specific cases */
+    .rtl-force {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+    
+    .ltr-force {
+        direction: ltr !important;
+        text-align: left !important;
+    }
+    
+    /* Improved bidirectional text handling */
+    .mixed-content {
+        isolation: isolate;
+    }
+    
+    /* ProseMirror RTL support */
+    .rtl-paragraph {
+        direction: rtl !important;
+        text-align: right !important;
+        unicode-bidi: isolate;
+    }
+    
+    .rtl-editor-container {
+        unicode-bidi: isolate;
+    }
+    
+    /* Bi-directional text support with proper isolation */
+    .bidi-auto {
+        unicode-bidi: plaintext;
+    }
+    
+    /* Specific classes for mixed text */
+    .arabic-segment {
+        font-family: 'Dubai', sans-serif;
+        unicode-bidi: isolate;
+        direction: rtl;
+    }
+    
+    .latin-segment {
+        font-family: 'geist', sans-serif;
+        unicode-bidi: isolate;
+        direction: ltr;
+    }
+    
+    /* Harmony between scripts */
+    .mixed-script-container {
+        isolation: isolate;
+        line-height: 1.6;
+    }
+    
+    /* Script boundary spacing */
+    .script-boundary {
+        margin-inline: 0.25em;
+    }
+    
+    /* RTL flipped margins/paddings */
+    .rtl-flip-x {
+        transform: scaleX(-1);
+    }
+    
+    /* Mirror layout for RTL */
+    .rtl-mirror {
+        @apply rtl:flex-row-reverse rtl:space-x-reverse;
+    }
+    
+    /* Align elements properly in RTL */
+    .rtl-align {
+        @apply rtl:mr-auto rtl:ml-0 ltr:ml-auto ltr:mr-0;
+    }
+    
+    /* RTL for flex items */
+    .rtl-flex {
+        @apply rtl:flex-row-reverse ltr:flex-row;
+    }
+    
+    /* RTL for artifact components */
+    .rtl-artifact {
+        @apply rtl:right-0 rtl:left-auto ltr:left-0 ltr:right-auto;
+    }
+    
+    /* Icon mirroring for RTL layouts */
+    [dir="rtl"] .should-mirror {
+        transform: scaleX(-1);
+    }
+    
+    /* Visual indicators for text direction */
+    .rtl-indicator::before {
+        content: "◂";
+        display: inline-block;
+        color: var(--muted-foreground);
+        margin-inline-end: 0.25em;
+        font-size: 0.75em;
+        vertical-align: middle;
+        opacity: 0.5;
+    }
+    
+    .ltr-indicator::after {
+        content: "▸";
+        display: inline-block;
+        color: var(--muted-foreground);
+        margin-inline-start: 0.25em;
+        font-size: 0.75em;
+        vertical-align: middle;
+        opacity: 0.5;
+    }
+    
     /* Larger font sizes for kids */
     .text-kid-friendly {
         font-size: 1.125rem;
@@ -181,6 +288,7 @@
     /* Arabic number formatting */
     .arabic-numbers {
         font-feature-settings: "tnum" 1;
+        font-family: 'Dubai', sans-serif;
     }
     
     /* Add decorative elements */
@@ -190,6 +298,25 @@
         display: inline-block;
         padding: 0 0.5rem;
         color: var(--primary);
+    }
+    
+    /* Better lists in RTL context */
+    .rtl-list {
+        list-style-position: inside;
+        padding-right: 1rem;
+    }
+    
+    /* Better inline direction */
+    .inline-rtl {
+        display: inline-block;
+        direction: rtl;
+        unicode-bidi: isolate;
+    }
+    
+    .inline-ltr {
+        display: inline-block;
+        direction: ltr;
+        unicode-bidi: isolate;
     }
     
     /* Kid-friendly button styles */
@@ -219,6 +346,29 @@
 
 .ProseMirror {
     outline: none;
+}
+
+/* ProseMirror RTL support */
+.ProseMirror[dir="rtl"] {
+    text-align: right;
+}
+
+.ProseMirror[dir="rtl"] p, 
+.ProseMirror[dir="rtl"] h1, 
+.ProseMirror[dir="rtl"] h2, 
+.ProseMirror[dir="rtl"] h3, 
+.ProseMirror[dir="rtl"] h4, 
+.ProseMirror[dir="rtl"] h5, 
+.ProseMirror[dir="rtl"] h6,
+.ProseMirror[dir="rtl"] ul,
+.ProseMirror[dir="rtl"] ol {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Ensure proper RTL placement for editor controls */
+.ProseMirror-menubar {
+    @apply rtl:right-0 rtl:left-auto ltr:left-0 ltr:right-auto;
 }
 
 .cm-editor,

@@ -17,9 +17,4 @@ export const chatModels: Array<ChatModel> = [
     name: 'Large model',
     description: 'Large model for complex, multi-step tasks',
   },
-  {
-    id: 'chat-model-reasoning',
-    name: 'Reasoning model',
-    description: 'Uses advanced reasoning',
-  },
 ];

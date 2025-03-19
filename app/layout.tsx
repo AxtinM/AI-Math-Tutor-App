@@ -76,7 +76,7 @@ export default async function RootLayout({
         />
         {/* manifest.json is now handled by app/manifest.ts */}
       </head>
-      <body className="antialiased font-dubai">
+      <body className="antialiased font-dubai overflow-x-hidden">
         <Script src="/worker-register.js" strategy="beforeInteractive" />
         <ThemeProvider
           attribute="class"

@@ -37,7 +37,7 @@ export function PureMessageActions({
 
   return (
     <TooltipProvider delayDuration={0}>
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row gap-2 rtl-mirror">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -45,13 +45,13 @@ export function PureMessageActions({
               variant="outline"
               onClick={async () => {
                 await copyToClipboard(message.content as string);
-                toast.success('Copied to clipboard!');
+                toast.success('تم النسخ إلى الحافظة!');
               }}
             >
               <CopyIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Copy</TooltipContent>
+          <TooltipContent>نسخ</TooltipContent>
         </Tooltip>
 
         <Tooltip>
@@ -72,7 +72,7 @@ export function PureMessageActions({
                 });
 
                 toast.promise(upvote, {
-                  loading: 'Upvoting Response...',
+                  loading: 'جاري التصويت الإيجابي...',
                   success: () => {
                     mutate<Array<Vote>>(
                       `/api/vote?chatId=${chatId}`,
@@ -95,16 +95,16 @@ export function PureMessageActions({
                       { revalidate: false },
                     );
 
-                    return 'Upvoted Response!';
+                    return 'تم التصويت الإيجابي!';
                   },
-                  error: 'Failed to upvote response.',
+                  error: 'فشل التصويت الإيجابي.',
                 });
               }}
             >
               <ThumbUpIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Upvote Response</TooltipContent>
+          <TooltipContent>تصويت إيجابي</TooltipContent>
         </Tooltip>
 
         <Tooltip>
@@ -125,7 +125,7 @@ export function PureMessageActions({
                 });
 
                 toast.promise(downvote, {
-                  loading: 'Downvoting Response...',
+                  loading: 'جاري التصويت السلبي...',
                   success: () => {
                     mutate<Array<Vote>>(
                       `/api/vote?chatId=${chatId}`,
@@ -148,16 +148,16 @@ export function PureMessageActions({
                       { revalidate: false },
                     );
 
-                    return 'Downvoted Response!';
+                    return 'تم التصويت السلبي!';
                   },
-                  error: 'Failed to downvote response.',
+                  error: 'فشل التصويت السلبي.',
                 });
               }}
             >
               <ThumbDownIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Downvote Response</TooltipContent>
+          <TooltipContent>تصويت سلبي</TooltipContent>
         </Tooltip>
       </div>
     </TooltipProvider>

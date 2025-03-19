@@ -5,6 +5,7 @@ import { inputRules } from 'prosemirror-inputrules';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import React, { memo, useEffect, useRef } from 'react';
+import { rtlSupportPlugin } from '@/lib/editor/rtl-support';
 
 import type { Suggestion } from '@/lib/db/schema';
 import {
@@ -58,6 +59,7 @@ function PureEditor({
             ],
           }),
           suggestionsPlugin,
+          rtlSupportPlugin, // Add RTL support plugin
         ],
       });
 
@@ -146,7 +148,11 @@ function PureEditor({
   }, [suggestions, content]);
 
   return (
-    <div className="relative prose dark:prose-invert" ref={containerRef} />
+    <div 
+      className="relative prose dark:prose-invert rtl-editor-container" 
+      ref={containerRef}
+      dir="auto" // Let the browser detect direction automatically
+    />
   );
 }
 

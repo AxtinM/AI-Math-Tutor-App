@@ -2,6 +2,7 @@ import { Artifact } from '@/components/create-artifact';
 import { DiffView } from '@/components/diffview';
 import { DocumentSkeleton } from '@/components/document-skeleton';
 import { Editor } from '@/components/text-editor';
+import { containsRTL, setDocumentDirection } from '@/lib/utils/rtl-helpers';
 import {
   ClockRewind,
   CopyIcon,
@@ -41,10 +42,21 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     }
 
     if (streamPart.type === 'text-delta') {
+      const newContent = streamPart.content as string;
+      
+      // Check if the content contains RTL characters and set document direction
+      if (containsRTL(newContent)) {
+        if (typeof window !== 'undefined') {
+          setDocumentDirection(newContent);
+        }
+      }
+      
       setArtifact((draftArtifact) => {
+        const updatedContent = draftArtifact.content + newContent;
+        
         return {
           ...draftArtifact,
-          content: draftArtifact.content + (streamPart.content as string),
+          content: updatedContent,
           isVisible:
             draftArtifact.status === 'streaming' &&
             draftArtifact.content.length > 400 &&
@@ -67,6 +79,11 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     isLoading,
     metadata,
   }) => {
+    // For existing content, check if it contains RTL text
+    // and update document direction accordingly
+    if (content && typeof window !== 'undefined') {
+      setDocumentDirection(content);
+    }
     if (isLoading) {
       return <DocumentSkeleton artifactKind="text" />;
     }
@@ -80,15 +97,15 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
 
     return (
       <>
-        <div className="flex flex-row py-8 md:p-20 px-4">
-          <Editor
-            content={content}
-            suggestions={metadata ? metadata.suggestions : []}
-            isCurrentVersion={isCurrentVersion}
-            currentVersionIndex={currentVersionIndex}
-            status={status}
-            onSaveContent={onSaveContent}
-          />
+      <div className="flex flex-row py-8 md:p-20 px-4 rtl-support">
+        <Editor
+          content={content}
+          suggestions={metadata ? metadata.suggestions : []}
+          isCurrentVersion={isCurrentVersion}
+          currentVersionIndex={currentVersionIndex}
+          status={status}
+          onSaveContent={onSaveContent}
+        />
 
           {metadata &&
           metadata.suggestions &&
@@ -113,6 +130,7 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
 
         return false;
       },
+      shouldMirrorInRTL: true,
     },
     {
       icon: <UndoIcon size={18} />,
@@ -127,6 +145,7 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
 
         return false;
       },
+      shouldMirrorInRTL: true,
     },
     {
       icon: <RedoIcon size={18} />,
@@ -141,6 +160,7 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
 
         return false;
       },
+      shouldMirrorInRTL: true,
     },
     {
       icon: <CopyIcon size={18} />,

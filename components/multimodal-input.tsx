@@ -232,7 +232,7 @@ function PureMultimodalInput({
   };
 
   return (
-    <div className="relative w-full flex flex-col gap-4" onClick={(e) => e.stopPropagation()}>
+    <div className="relative w-full flex flex-col gap-4 overflow-x-hidden" onClick={(e) => e.stopPropagation()}>
       {messages.length === 0 &&
         attachments.length === 0 &&
         uploadQueue.length === 0 && (
@@ -251,7 +251,7 @@ function PureMultimodalInput({
       {(attachments.length > 0 || uploadQueue.length > 0) && (
         <div
           data-testid="attachments-preview"
-          className="flex flex-row gap-2 overflow-x-scroll items-end"
+          className="flex flex-row gap-2 overflow-x-auto -mx-2 px-2 items-end max-w-full"
         >
           {attachments.map((attachment) => (
             <PreviewAttachment key={attachment.url} attachment={attachment} />
@@ -278,11 +278,12 @@ function PureMultimodalInput({
         value={input}
         onChange={handleInput}
         className={cx(
-          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-lg bg-muted pb-10 dark:border-zinc-700 font-dubai',
+          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-lg bg-muted pb-10 dark:border-zinc-700 font-dubai rtl-force',
           className,
         )}
         rows={2}
         autoFocus
+        dir="rtl"
         onKeyDown={(event) => {
           if (
             event.key === 'Enter' &&
@@ -292,7 +293,7 @@ function PureMultimodalInput({
             event.preventDefault();
 
             if (status !== 'ready') {
-              toast.error('Please wait for the model to finish its response!');
+              toast.error('يرجى الانتظار حتى ينتهي النموذج من الرد!');
             } else {
               submitForm();
             }

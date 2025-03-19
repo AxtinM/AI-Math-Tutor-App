@@ -12,7 +12,7 @@ export const Overview = () => {
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ delay: 0.5 }}
     >
-      <div className="rounded-xl p-6 flex flex-col gap-8 leading-relaxed text-center max-w-xl">
+      <div className="rounded-xl p-6 flex flex-col gap-8 leading-relaxed text-center max-w-xl rtl-force" dir="rtl">
         <div className="flex justify-center">
           <Image 
             src="/images/math_tutor_logo.png" 
