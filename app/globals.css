@@ -2,407 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-    /* Light theme based on logo colors */
-    --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 253, 247, 228;
-    --background-end-rgb: 255, 250, 235;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --foreground-rgb: 255, 255, 255;
-        --background-start-rgb: 0, 77, 57;
-        --background-end-rgb: 0, 92, 64;
-    }
-}
-
+/* PWA enhancements */
 @layer utilities {
-    .text-balance {
-        text-wrap: balance;
-    }
+  /* PWA specific styles */
+  .ios-pwa {
+    /* Prevent overscroll bounce */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    touch-action: manipulation;
     
-    /* RTL Support for Arabic */
-    .rtl-support {
-        direction: rtl;
-        text-align: right;
-    }
-    
-    /* Enhanced RTL support for specific cases */
-    .rtl-force {
-        direction: rtl !important;
-        text-align: right !important;
-    }
-    
-    .ltr-force {
-        direction: ltr !important;
-        text-align: left !important;
-    }
-    
-    /* Improved bidirectional text handling */
-    .mixed-content {
-        isolation: isolate;
-    }
-    
-    /* ProseMirror RTL support */
-    .rtl-paragraph {
-        direction: rtl !important;
-        text-align: right !important;
-        unicode-bidi: isolate;
-    }
-    
-    .rtl-editor-container {
-        unicode-bidi: isolate;
-    }
-    
-    /* Bi-directional text support with proper isolation */
-    .bidi-auto {
-        unicode-bidi: plaintext;
-    }
-    
-    /* Specific classes for mixed text */
-    .arabic-segment {
-        font-family: 'Dubai', sans-serif;
-        unicode-bidi: isolate;
-        direction: rtl;
-    }
-    
-    .latin-segment {
-        font-family: 'geist', sans-serif;
-        unicode-bidi: isolate;
-        direction: ltr;
-    }
-    
-    /* Harmony between scripts */
-    .mixed-script-container {
-        isolation: isolate;
-        line-height: 1.6;
-    }
-    
-    /* Script boundary spacing */
-    .script-boundary {
-        margin-inline: 0.25em;
-    }
-    
-    /* RTL flipped margins/paddings */
-    .rtl-flip-x {
-        transform: scaleX(-1);
-    }
-    
-    /* Mirror layout for RTL */
-    .rtl-mirror {
-        @apply rtl:flex-row-reverse rtl:space-x-reverse;
-    }
-    
-    /* Align elements properly in RTL */
-    .rtl-align {
-        @apply rtl:mr-auto rtl:ml-0 ltr:ml-auto ltr:mr-0;
-    }
-    
-    /* RTL for flex items */
-    .rtl-flex {
-        @apply rtl:flex-row-reverse ltr:flex-row;
-    }
-    
-    /* RTL for artifact components */
-    .rtl-artifact {
-        @apply rtl:right-0 rtl:left-auto ltr:left-0 ltr:right-auto;
-    }
-    
-    /* Icon mirroring for RTL layouts */
-    [dir="rtl"] .should-mirror {
-        transform: scaleX(-1);
-    }
-    
-    /* Visual indicators for text direction */
-    .rtl-indicator::before {
-        content: "◂";
-        display: inline-block;
-        color: var(--muted-foreground);
-        margin-inline-end: 0.25em;
-        font-size: 0.75em;
-        vertical-align: middle;
-        opacity: 0.5;
-    }
-    
-    .ltr-indicator::after {
-        content: "▸";
-        display: inline-block;
-        color: var(--muted-foreground);
-        margin-inline-start: 0.25em;
-        font-size: 0.75em;
-        vertical-align: middle;
-        opacity: 0.5;
-    }
-    
-    /* Larger font sizes for kids */
-    .text-kid-friendly {
-        font-size: 1.125rem;
-        line-height: 1.75rem;
-    }
-    
-    .text-kid-friendly-title {
-        font-size: 1.5rem;
-        line-height: 2rem;
-    }
-}
+    /* Respect safe areas */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* iOS status bar styles */
+  .ios-pwa header {
+    padding-top: env(safe-area-inset-top, 0);
+  }
 
-@layer base {
-    :root {
-        /* Logo-inspired color palette for light mode - emerald green and gold/cream */
-        --background: 49 38% 96%;
-        --foreground: 160 92% 12%;
-        --card: 48 38% 98%;
-        --card-foreground: 160 85% 14%;
-        --popover: 48 38% 98%;
-        --popover-foreground: 160 85% 14%;
-        --primary: 160 84% 22%;
-        --primary-foreground: 48 38% 98%;
-        --secondary: 48 30% 92%;
-        --secondary-foreground: 160 75% 18%;
-        --muted: 48 30% 92%;
-        --muted-foreground: 160 25% 30%;
-        --accent: 36 70% 80%;
-        --accent-foreground: 160 84% 22%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 160 30% 86%;
-        --input: 160 30% 86%;
-        --ring: 160 84% 22%;
-        --chart-1: 160 76% 35%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 36 74% 66%;
-        --chart-5: 48 80% 55%;
-        --radius: 1rem; /* Larger radius for kid-friendly rounded corners */
-        --sidebar-background: 48 38% 96%;
-        --sidebar-foreground: 160 75% 14%;
-        --sidebar-primary: 160 84% 22%;
-        --sidebar-primary-foreground: 48 38% 98%;
-        --sidebar-accent: 48 30% 92%;
-        --sidebar-accent-foreground: 160 75% 18%;
-        --sidebar-border: 48 20% 90%;
-        --sidebar-ring: 160 75% 40%;
-        
-        /* Font size variables */
-        --font-size-base: 1.125rem;
-        --font-size-lg: 1.25rem;
-        --font-size-xl: 1.5rem;
-    }
-    
-    .dark {
-        /* Logo-inspired color palette for dark mode - deep emerald and gold accents */
-        --background: 160 80% 8%;
-        --foreground: 48 30% 95%;
-        --card: 160 70% 10%;
-        --card-foreground: 48 30% 95%;
-        --popover: 160 70% 10%;
-        --popover-foreground: 48 30% 95%;
-        --primary: 160 60% 45%;
-        --primary-foreground: 160 84% 8%;
-        --secondary: 160 40% 20%;
-        --secondary-foreground: 48 30% 95%;
-        --muted: 160 40% 20%;
-        --muted-foreground: 48 20% 80%;
-        --accent: 36 70% 60%;
-        --accent-foreground: 0 0% 100%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 160 40% 22%;
-        --input: 160 40% 22%;
-        --ring: 160 60% 45%;
-        --chart-1: 160 70% 45%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 36 70% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 48 65% 60%;
-        --sidebar-background: 160 80% 6%;
-        --sidebar-foreground: 48 20% 90%;
-        --sidebar-primary: 160 60% 45%;
-        --sidebar-primary-foreground: 0 0% 100%;
-        --sidebar-accent: 160 40% 20%;
-        --sidebar-accent-foreground: 48 20% 90%;
-        --sidebar-border: 160 40% 20%;
-        --sidebar-ring: 160 60% 45%;
-    }
-}
+  /* Bottom navigation padding for iOS */
+  .ios-pwa footer,
+  .ios-pwa .fixed-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  
+  /* Apply smooth transitions for app-like feel */
+  .page-transition {
+    animation: fadeIn 0.3s ease-in-out;
+  }
 
-@layer base {
-    * {
-        @apply border-border;
-    }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  /* Offline indicator styles */
+  .offline-indicator {
+    position: fixed;
+    bottom: env(safe-area-inset-bottom, 16px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: hsl(var(--destructive));
+    color: hsl(var(--destructive-foreground));
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    z-index: 50;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.3s ease-out forwards;
+  }
+  
+  @keyframes slideUp {
+    from { transform: translate(-50%, 100%); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+  }
+  
+  /* Hide browser address bar - a common PWA technique */
+  html {
+    height: 100%;
+    overflow-x: hidden;
+  }
 
-    html {
-        font-size: 16px; /* Base font size increased for better readability */
-    }
-
-    body {
-        @apply bg-background text-foreground rtl-support;
-        font-size: var(--font-size-base);
-    }
-
-    /* Dubai font for Arabic */
-    @font-face {
-        font-family: "Dubai";
-        font-style: normal;
-        font-weight: 300;
-        src: url(/fonts/dubai/Dubai-300.woff2) format("woff2");
-    }
-
-    @font-face {
-        font-family: "Dubai";
-        font-style: normal;
-        font-weight: 400;
-        src: url(/fonts/dubai/Dubai-400.woff2) format("woff2");
-    }
-
-    @font-face {
-        font-family: "Dubai";
-        font-style: normal;
-        font-weight: 500;
-        src: url(/fonts/dubai/Dubai-500.woff2) format("woff2");
-    }
-
-    @font-face {
-        font-family: "Dubai";
-        font-style: normal;
-        font-weight: 700;
-        src: url(/fonts/dubai/Dubai-700.woff2) format("woff2");
-    }
-
-    /* Keep geist as fallback */
-    @font-face {
-        font-family: "geist";
-        font-style: normal;
-        font-weight: 100 900;
-        src: url(/fonts/geist.woff2) format("woff2");
-    }
-
-    @font-face {
-        font-family: "geist-mono";
-        font-style: normal;
-        font-weight: 100 900;
-        src: url(/fonts/geist-mono.woff2) format("woff2");
-    }
-    
-    /* Arabic number formatting */
-    .arabic-numbers {
-        font-feature-settings: "tnum" 1;
-        font-family: 'Dubai', sans-serif;
-    }
-    
-    /* Add decorative elements */
-    .arabic-decoration::before,
-    .arabic-decoration::after {
-        content: "☆";
-        display: inline-block;
-        padding: 0 0.5rem;
-        color: var(--primary);
-    }
-    
-    /* Better lists in RTL context */
-    .rtl-list {
-        list-style-position: inside;
-        padding-right: 1rem;
-    }
-    
-    /* Better inline direction */
-    .inline-rtl {
-        display: inline-block;
-        direction: rtl;
-        unicode-bidi: isolate;
-    }
-    
-    .inline-ltr {
-        display: inline-block;
-        direction: ltr;
-        unicode-bidi: isolate;
-    }
-    
-    /* Kid-friendly button styles */
-    .btn-kid-friendly {
-        @apply rounded-full py-3 px-6 shadow-md transition-all duration-300 transform hover:scale-105 focus:ring-4 focus:ring-primary/30;
-    }
-}
-
-.skeleton {
-    * {
-        pointer-events: none !important;
-    }
-
-    *[class^="text-"] {
-        color: transparent;
-        @apply rounded-md bg-foreground/20 select-none animate-pulse;
-    }
-
-    .skeleton-bg {
-        @apply bg-foreground/10;
-    }
-
-    .skeleton-div {
-        @apply bg-foreground/20 animate-pulse;
-    }
-}
-
-.ProseMirror {
-    outline: none;
-}
-
-/* ProseMirror RTL support */
-.ProseMirror[dir="rtl"] {
-    text-align: right;
-}
-
-.ProseMirror[dir="rtl"] p, 
-.ProseMirror[dir="rtl"] h1, 
-.ProseMirror[dir="rtl"] h2, 
-.ProseMirror[dir="rtl"] h3, 
-.ProseMirror[dir="rtl"] h4, 
-.ProseMirror[dir="rtl"] h5, 
-.ProseMirror[dir="rtl"] h6,
-.ProseMirror[dir="rtl"] ul,
-.ProseMirror[dir="rtl"] ol {
-    direction: rtl;
-    text-align: right;
-}
-
-/* Ensure proper RTL placement for editor controls */
-.ProseMirror-menubar {
-    @apply rtl:right-0 rtl:left-auto ltr:left-0 ltr:right-auto;
-}
-
-.cm-editor,
-.cm-gutters {
-    @apply bg-background dark:bg-zinc-800 outline-none selection:bg-zinc-900 !important;
-}
-
-.ͼo.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground,
-.ͼo.cm-selectionBackground,
-.ͼo.cm-content::selection {
-    @apply bg-zinc-200 dark:bg-zinc-900 !important;
-}
-
-.cm-activeLine,
-.cm-activeLineGutter {
-    @apply bg-transparent !important;
-}
-
-.cm-activeLine {
-    @apply rounded-r-sm !important;
-}
-
-.cm-lineNumbers {
-    @apply min-w-7;
-}
-
-.cm-foldGutter {
-    @apply min-w-3;
-}
-
-.cm-lineNumbers .cm-activeLineGutter {
-    @apply rounded-l-sm !important;
-}
-
-.suggestion-highlight {
-    @apply bg-blue-200 hover:bg-blue-300 dark:hover:bg-blue-400/50 dark:text-blue-50 dark:bg-blue-500/40;
+  /* Remove tap highlight on mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Prevent text selection in PWA mode */
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* Smooth scrolling for content */
+  .pwa-content {
+    scroll-behavior: smooth;
+  }
 }

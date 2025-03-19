@@ -7,7 +7,14 @@ import DecorativePattern from '@/components/decorative-pattern';
 import PWAInstallPrompt from '@/components/pwa-install-prompt';
 import ServiceWorkerRegistration from '@/components/service-worker-registration';
 
+import OfflineIndicator from '@/components/offline-indicator';
 import './globals.css';
+
+// Define iOS and Android meta tags
+const IOS_STATUS_BAR_STYLE = "black-translucent";
+const APPLE_TOUCH_ICON_URL = "/images/icons/apple-touch-icon.png";
+const THEME_COLOR_LIGHT = "#ffffff";
+const THEME_COLOR_DARK = "hsl(240deg 10% 3.92%)";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chat.vercel.ai'),
@@ -18,19 +25,63 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: 'default',
     title: 'Math Tutor',
+    startupImage: [
+      {
+        url: '/images/splash/apple-splash-2048-2732.png',
+        media: '(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+      },
+      {
+        url: '/images/splash/apple-splash-1668-2388.png',
+        media: '(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+      },
+      {
+        url: '/images/splash/apple-splash-1536-2048.png',
+        media: '(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+      },
+      {
+        url: '/images/splash/apple-splash-1242-2688.png',
+        media: '(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+      },
+      {
+        url: '/images/splash/apple-splash-1125-2436.png',
+        media: '(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+      },
+      {
+        url: '/images/splash/apple-splash-828-1792.png',
+        media: '(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+      },
+      {
+        url: '/images/splash/apple-splash-750-1334.png',
+        media: '(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+      },
+      {
+        url: '/images/splash/apple-splash-640-1136.png',
+        media: '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+      }
+    ]
   },
   applicationName: 'Math Tutor',
   formatDetection: {
     telephone: false,
   },
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: 'hsl(240deg 10% 3.92%)' }
+  ],
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'mobile-web-app-capable': 'yes'
+  }
 };
 
 export const viewport = {
-  maximumScale: 1, // Disable auto-zoom on mobile Safari
   width: 'device-width',
   initialScale: 1,
+  maximumScale: 1,
   minimumScale: 1,
   userScalable: false,
+  viewportFit: 'cover'
 };
 
 const LIGHT_THEME_COLOR = 'hsl(0 0% 100%)';
@@ -91,6 +142,7 @@ export default async function RootLayout({
           </div>
           {/* PWA components */}
           <PWAInstallPrompt />
+          <OfflineIndicator />
           <ServiceWorkerRegistration />
         </ThemeProvider>
       </body>
