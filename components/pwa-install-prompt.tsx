@@ -447,7 +447,7 @@ export default function PWAInstallPrompt() {
   };
 
   // Don't show if already installed, no prompt available, not a mobile device, or already shown today
-  if (isInstalled || !showPrompt || !isMobile || !canShowToday) return null;
+  if (isInstalled || !showPrompt || !isMobile || (!canShowToday && !deferredPrompt)) return null;
 
   // iOS specific install instructions
   if (platform === 'ios') {
