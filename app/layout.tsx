@@ -6,7 +6,6 @@ import { ThemeProvider } from '@/components/theme-provider';
 import DecorativePattern from '@/components/decorative-pattern';
 import PWAInstallPrompt from '@/components/pwa-install-prompt';
 import ServiceWorkerRegistration from '@/components/service-worker-registration';
-import PWADebugPanel from '@/components/pwa-debug';
 
 import OfflineIndicator from '@/components/offline-indicator';
 import './globals.css';
@@ -145,7 +144,6 @@ export default async function RootLayout({
           <PWAInstallPrompt />
           <OfflineIndicator />
           <ServiceWorkerRegistration />
-          <PWADebugPanel />
         </ThemeProvider>
       </body>
     </html>
