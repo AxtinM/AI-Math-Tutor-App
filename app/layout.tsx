@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Toaster } from 'sonner';
 import Script from 'next/script';
 
@@ -6,11 +6,9 @@ import { ThemeProvider } from '@/components/theme-provider';
 import DecorativePattern from '@/components/decorative-pattern';
 import './globals.css';
 
-// Define iOS and Android meta tags
-const IOS_STATUS_BAR_STYLE = "black-translucent";
-const APPLE_TOUCH_ICON_URL = "/images/icons/apple-touch-icon.png";
-const THEME_COLOR_LIGHT = "#ffffff";
-const THEME_COLOR_DARK = "hsl(240deg 10% 3.92%)";
+export const viewport: Viewport = {
+  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#fff" }],
+};
 
 export const metadata: Metadata = {
   title: "PWA NextJS",
@@ -18,7 +16,6 @@ export const metadata: Metadata = {
   generator: "Next.js",
   manifest: "/manifest.json",
   keywords: ["nextjs", "next14", "pwa", "next-pwa"],
-  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#fff" }],
   authors: [
     {
       name: "imvinojanv",
@@ -42,6 +39,12 @@ export default async function RootLayout({
       lang='ar'
       suppressHydrationWarning
     >
+      <head>
+        <meta
+          name="format-detection"
+          content="telephone=no, date=no, email=no, address=no"
+        />
+      </head>
       <body className="antialiased font-dubai overflow-x-hidden">
         <Script src="/sw.js" strategy="beforeInteractive" />
         <ThemeProvider

@@ -1,7 +1,7 @@
 {
-  "name": "مساعد الرياضيات - Math Tutor",
-  "short_name": "Math Tutor",
-  "description": "معلم الرياضيات الذكي للأطفال العرب",
+  "name": "مساعد الواجبات المنزلية",
+  "short_name": "مساعد الواجبات",
+  "description": "مساعد تفاعلي لمساعدة الطلاب في أداء واجباتهم المدرسية بطريقة ممتعة.",
   "id": "/",
   "start_url": "/",
   "display": "standalone",
@@ -16,7 +16,8 @@
   "categories": [
     "education",
     "kids",
-    "mathematics"
+    "homework",
+    "learning"
   ],
   "icons": [
     {

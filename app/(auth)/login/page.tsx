@@ -24,20 +24,25 @@ export default function Page() {
   );
 
   useEffect(() => {
+    if (state.status === 'success') {
+      setIsSuccessful(true);
+      // Add a small delay before redirect to prevent potential loops
+      setTimeout(() => {
+        router.replace('/');  // Use replace instead of push
+      }, 100);
+      return; // Early return to prevent multiple state updates
+    }
+
     if (state.status === 'failed') {
       toast({
         type: 'error',
-        description: 'بيانات اعتماد غير صالحة!', // Arabic: Invalid credentials!
+        description: 'بيانات اعتماد غير صالحة!',
       });
     } else if (state.status === 'invalid_data') {
       toast({
         type: 'error',
-        description: 'فشل في التحقق من صحة طلبك!', // Arabic: Failed validating your submission!
+        description: 'فشل في التحقق من صحة طلبك!',
       });
-    } else if (state.status === 'success') {
-      setIsSuccessful(true);
-      // Navigate to home page after successful login
-      router.push('/');
     }
   }, [state.status, router]);
 
@@ -65,7 +70,7 @@ export default function Page() {
             >
               سجل الآن
             </Link>
-            {' مجاناً.'}
+            {' مجان.'}
           </p>
         </AuthForm>
       </div>

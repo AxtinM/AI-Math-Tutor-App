@@ -16,8 +16,8 @@ export default function MathTutorAvatar({ size = 40 }: { size?: number }) {
   return (
     <div className="flex items-center justify-center rounded-full overflow-hidden" style={{ width: size, height: size }}>
       <Image
-        src="/images/math_tutor_logo.png"
-        alt="Math Tutor Logo"
+            src="/images/homework_assistant_logo.png"
+            alt="مساعد الواجبات المنزلية Logo"
         width={size}
         height={size}
         className="object-contain rounded-full"

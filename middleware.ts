@@ -14,22 +14,30 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Authentication check
+  // Add debug logging to track the flow
   const session = await auth();
   const isLoggedIn = !!session?.user;
+  console.log("pathname : ", request.nextUrl.pathname)
   const isLoginPage = request.nextUrl.pathname === '/login';
   const isRegisterPage = request.nextUrl.pathname === '/register';
   const isAuthPage = isLoginPage || isRegisterPage;
-  
+
+  // Prevent redirect loops by checking the referrer
+  const referrer = request.headers.get('referer');
+  console.log("referrer : ", referrer)
+  if (referrer?.includes('/login') && isLoginPage) {
+    return NextResponse.next();
+  }
+
   // If user is logged in and tries to access auth pages, redirect to home
   if (isLoggedIn && isAuthPage) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
   // If user is not logged in and trying to access protected routes, redirect to login
-  if (!isLoggedIn && !isAuthPage && 
-      !request.nextUrl.pathname.startsWith('/api') && 
-      !request.nextUrl.pathname.startsWith('/_next')) {
+  if (!isLoggedIn && !isAuthPage &&
+    !request.nextUrl.pathname.startsWith('/api') &&
+    !request.nextUrl.pathname.startsWith('/_next')) {
     const loginUrl = new URL('/login', request.url);
     return NextResponse.redirect(loginUrl);
   }
@@ -40,11 +48,15 @@ export async function middleware(request: NextRequest) {
 
 // Configure the matcher to apply this middleware to specific paths
 export const config = {
-  // Specify paths that should be processed by this middleware
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    // Match all paths except:
+    // - api routes
+    // - _next (Next.js internals)
+    // - static files (icons, images)
+    // - favicon.ico
+    // But include specific PWA files
+    '/((?!api|_next|images|favicon.ico).*)',
     '/sw.js',
-    '/manifest',
     '/manifest.json',
     '/workbox-:path*',
     '/fallback-:path*',
