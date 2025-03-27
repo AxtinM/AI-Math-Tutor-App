@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import MathTutorAvatar from './math-tutor-avatar';
 
 export const Overview = () => {
   return (

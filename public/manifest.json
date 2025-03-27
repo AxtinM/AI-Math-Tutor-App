@@ -5,11 +5,19 @@
   "id": "/",
   "start_url": "/",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "orientation": "portrait",
-  "categories": ["education", "kids", "mathematics"],
+  "categories": [
+    "education",
+    "kids",
+    "mathematics"
+  ],
   "icons": [
     {
       "src": "/images/icons/icon-192x192.png",
@@ -50,5 +58,6 @@
     }
   ],
   "lang": "ar",
-  "dir": "rtl"
+  "dir": "rtl",
+  "splash_pages": null
 }

@@ -1,37 +1,20 @@
-import type { NextConfig } from 'next';
 import withPWA from 'next-pwa';
 
-// Import custom runtime caching config
-const runtimeCaching = require('./pwa-cache.config');
+const nextConfig = {
+  reactStrictMode: true,      // Enable React strict mode for improved error handling
+  swcMinify: true,            // Enable SWC minification for improved performance
+}
 
-const nextConfig: NextConfig = withPWA({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  disable: false, // Enable service worker in all environments for testing
-  runtimeCaching,
+export default withPWA({
+  dest: 'public', // Output directory for service worker
+  register: true, // Automatically register service worker
+  skipWaiting: true, // Activate service worker immediately
   scope: '/',
   sw: 'sw.js',
-  buildExcludes: [
-    // Exclude problematic files from precaching
-    /app-build-manifest\.json$/,
-    /middleware-manifest\.json$/
+  publicExcludes: [
+    // Exclude problematic files from being copied to the public folder
+    'sw.js',
+    'workbox-*.js',
+    'fallback-*.js',
   ],
-})({
-  experimental: {
-    ppr: true,
-  },
-  images: {
-    remotePatterns: [
-      {
-        hostname: 'avatar.vercel.sh',
-      },
-    ],
-  },
-  // Handle redirects for manifest.json
-  async redirects() {
-    return [];
-  },
-});
-
-export default nextConfig;
+})(nextConfig);
