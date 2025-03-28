@@ -68,7 +68,7 @@ const components: Partial<Components> = {
       <ol className={cn(
         "list-decimal list-outside rtl:mr-4 ltr:ml-4",
         hasRTL && "rtl-list"
-      )} dir={hasRTL ? 'rtl' : 'ltr'} {...props}>
+      )} {...props}>
         {children}
       </ol>
     );
@@ -91,13 +91,10 @@ const components: Partial<Components> = {
           !hasRTL && hasLatin && "font-geist",
           hasMixed && "mixed-content"
         )}
-        dir={hasRTL ? 'rtl' : 'ltr'}
+        dir="auto" // Use auto direction for list items
         {...props}
       >
-        {hasMixed
-          ? <span dangerouslySetInnerHTML={{ __html: wrapMixedContent(text) }} />
-          : children
-        }
+        {children} {/* Render children directly, let dir="auto" handle mixed content */}
       </li>
     );
   },

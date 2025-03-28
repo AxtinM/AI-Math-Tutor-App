@@ -4,6 +4,7 @@ import { useScrollToBottom } from './use-scroll-to-bottom';
 import { Overview } from './overview';
 import { memo } from 'react';
 import { Vote } from '@/lib/db/schema';
+import { cn } from '@/lib/utils'; // Import cn utility
 import equal from 'fast-deep-equal';
 import { UseChatHelpers } from '@ai-sdk/react';
 
@@ -26,6 +27,7 @@ function PureMessages({
   setMessages,
   reload,
   isReadonly,
+  isArtifactVisible, // Destructure isArtifactVisible here
 }: MessagesProps) {
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
@@ -33,10 +35,14 @@ function PureMessages({
   return (
     <div
       ref={messagesContainerRef}
-      className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll overflow-x-hidden pt-4 rtl-support"
+      className={cn(
+        "flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll overflow-x-hidden pt-4 rtl-support",
+        isArtifactVisible && "hidden" // Change 'invisible' to 'hidden'
+      )}
       dir="rtl"
     >
-      {messages.length === 0 && <Overview />}
+      {/* Render Overview only if messages are empty AND artifact is not visible */}
+      {messages.length === 0 && !isArtifactVisible && <Overview />}
 
       {messages.map((message, index) => (
         <PreviewMessage

@@ -117,7 +117,7 @@ const PurePreviewMessage = ({
                   className={cn('flex flex-col gap-4 font-dubai text-lg rtl-force', {
                     'bg-primary text-primary-foreground px-4 sm:px-6 py-2 sm:py-3 rounded-2xl shadow-md':
                       message.role === 'user',
-                    'bg-accent/10 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-sm overflow-hidden': 
+                    'bg-accent/10 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-sm overflow-hidden':
                       message.role === 'assistant',
                   })}
                 >
@@ -144,6 +144,9 @@ const PurePreviewMessage = ({
               <div className="flex flex-col gap-4">
                 {message.toolInvocations.map((toolInvocation) => {
                   const { toolName, toolCallId, state, args } = toolInvocation;
+
+                  console.log("ARGSD : ", args)
+                  console.log("toolName : ", toolName)
 
                   if (state === 'result') {
                     const { result } = toolInvocation;

@@ -269,14 +269,15 @@ function PureArtifact({
       {artifact.isVisible && (
         <motion.div
           data-testid="artifact"
-          className="flex flex-row h-dvh w-dvw fixed top-0 left-0 z-50 bg-transparent rtl-support"
+          className="flex flex-row h-dvh w-dvw fixed top-0 left-0 z-50 rtl-support"
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { delay: 0.4 } }}
         >
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-lg" />
           {!isMobile && (
             <motion.div
-              className="fixed bg-background h-dvh"
+              className="fixed h-dvh"
               initial={{
                 width: isSidebarOpen ? windowWidth - 256 : windowWidth,
                 right: isRTL ? 'auto' : 0,
@@ -296,11 +297,11 @@ function PureArtifact({
           )}
 
           {!isMobile && (
-            <motion.div
-              className="relative w-[400px] bg-muted dark:bg-background h-dvh shrink-0"
-              initial={{ 
-                opacity: 0, 
-                x: isRTL ? -10 : 10, 
+            <motion.div // Desktop sidebar
+              className="relative w-[400px] h-dvh shrink-0 z-5" // Added z-5
+              initial={{
+                opacity: 0,
+                x: isRTL ? -10 : 10,
                 scale: 1 
               }}
               animate={{
@@ -324,7 +325,7 @@ function PureArtifact({
               <AnimatePresence>
                 {!isCurrentVersion && (
                   <motion.div
-                    className="left-0 absolute h-dvh w-[400px] top-0 bg-zinc-900/50 z-50"
+                    className="left-0 absolute h-dvh w-[400px] top-0 bg-zinc-900 z-50"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -364,8 +365,9 @@ function PureArtifact({
             </motion.div>
           )}
 
+          {/* Main Artifact Panel */}
           <motion.div
-            className="fixed dark:bg-muted bg-background h-dvh flex flex-col overflow-y-scroll md:border-l dark:border-zinc-700 border-zinc-200 rtl-support"
+            className="fixed bg-background h-dvh flex flex-col overflow-y-scroll md:border-l dark:border-zinc-700 border-zinc-200 rtl-support z-10" // Removed relative, kept z-10
             initial={
               isMobile
                 ? {
