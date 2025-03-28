@@ -16,24 +16,14 @@ interface SuggestedActionsProps {
 function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
   const suggestedActions = [
     {
-      title: 'مسائل الجمع والطرح',
-      label: 'كيف أحسب 24 + 18؟',
-      action: 'كيف أحسب 24 + 18؟',
+      title: 'دورة الماء 💧',
+      label: 'اشرح لي دورة الماء في الطبيعة',
+      action: 'اشرح لي دورة الماء في الطبيعة',
     },
     {
-      title: 'مسائل الضرب',
-      label: 'اشرح لي جدول الضرب من 1 إلى 10',
-      action: 'اشرح لي جدول الضرب من 1 إلى 10',
-    },
-    {
-      title: 'الكسور',
-      label: 'كيف أجمع الكسور المختلفة؟',
-      action: 'كيف أجمع الكسور المختلفة؟',
-    },
-    {
-      title: 'الأشكال الهندسية',
-      label: 'ما هي أنواع المثلثات؟',
-      action: 'ما هي أنواع المثلثات؟',
+      title: 'الأهرامات المصرية 🇪🇬',
+      label: 'من بنى الأهرامات ولماذا؟',
+      action: 'من بنى الأهرامات ولماذا؟',
     },
   ];
 
@@ -42,14 +32,14 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
       data-testid="suggested-actions"
       className="grid sm:grid-cols-2 gap-3 w-full"
     >
-      {suggestedActions.map((suggestedAction, index) => (
+      {suggestedActions.slice(0, 2).map((suggestedAction, index) => (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ delay: 0.05 * index }}
           key={`suggested-action-${suggestedAction.title}-${index}`}
-          className={index > 1 ? 'hidden sm:block' : 'block'}
+          className="block"
         >
           <Button
             variant="ghost"
@@ -61,7 +51,7 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
                 content: suggestedAction.action,
               });
             }}
-            className="text-right border border-primary/30 bg-primary/5 hover:bg-primary/10 rounded-2xl px-4 py-4 text-md flex-1 gap-2 sm:flex-col w-full h-auto justify-start items-start font-dubai shadow-sm rtl-force"
+            className="text-right border border-primary/30 bg-primary/5 hover:bg-primary/10 rounded-2xl p-4 text-md flex-1 gap-2 w-full h-auto justify-start items-start font-dubai shadow-sm rtl-force"
             dir="rtl"
           >
             <span className="font-medium text-lg arabic-decoration">{suggestedAction.title}</span>

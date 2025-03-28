@@ -17,14 +17,12 @@ export async function middleware(request: NextRequest) {
   // Add debug logging to track the flow
   const session = await auth();
   const isLoggedIn = !!session?.user;
-  console.log("pathname : ", request.nextUrl.pathname)
   const isLoginPage = request.nextUrl.pathname === '/login';
   const isRegisterPage = request.nextUrl.pathname === '/register';
   const isAuthPage = isLoginPage || isRegisterPage;
 
   // Prevent redirect loops by checking the referrer
   const referrer = request.headers.get('referer');
-  console.log("referrer : ", referrer)
   if (referrer?.includes('/login') && isLoginPage) {
     return NextResponse.next();
   }

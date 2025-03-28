@@ -1,3 +1,5 @@
+/* eslint-disable tailwindcss/migration-from-tailwind-2 */
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -31,7 +33,7 @@ export const CameraModal = ({ isOpen, onClose, onCapture }: CameraModalProps) =>
   // Start camera when modal opens
   useEffect(() => {
     let mounted = true;
-    
+
     if (isOpen && isCameraSupported) {
       const startCamera = async () => {
         try {
@@ -43,18 +45,18 @@ export const CameraModal = ({ isOpen, onClose, onCapture }: CameraModalProps) =>
               height: { ideal: 720 }
             }
           };
-          
+
           const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
           console.log("Camera access granted, tracks:", mediaStream.getVideoTracks().length);
-          
+
           // Only set if component is still mounted
           if (!mounted) return;
-          
+
           setStream(mediaStream);
-          
+
           if (videoRef.current) {
             videoRef.current.srcObject = mediaStream;
-            
+
             // Ensure video plays once metadata is loaded
             videoRef.current.onloadedmetadata = () => {
               if (videoRef.current) {
@@ -73,7 +75,7 @@ export const CameraModal = ({ isOpen, onClose, onCapture }: CameraModalProps) =>
 
       startCamera();
     }
-    
+
     // Cleanup function to stop the camera when modal closes
     return () => {
       mounted = false;
@@ -84,7 +86,7 @@ export const CameraModal = ({ isOpen, onClose, onCapture }: CameraModalProps) =>
           console.log(`Track ${track.id} stopped`);
         });
         setStream(null);
-        
+
         if (videoRef.current) {
           videoRef.current.srcObject = null;
         }
@@ -97,28 +99,28 @@ export const CameraModal = ({ isOpen, onClose, onCapture }: CameraModalProps) =>
       e.preventDefault();
       e.stopPropagation();
     }
-    
+
     if (!videoRef.current || !canvasRef.current) return;
-    
+
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    
+
     // Set canvas dimensions to match the video
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    
+
     // Draw the current video frame on the canvas
     const context = canvas.getContext('2d');
     if (context) {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      
+
       // Convert canvas to blob
       canvas.toBlob((blob) => {
         if (blob) {
           // Create a file from the blob
           const fileName = `captured-image-${Date.now()}.jpg`;
           const file = new File([blob], fileName, { type: 'image/jpeg' });
-          
+
           // Pass the file to the parent component and wait for completion
           // before closing to prevent form submissions
           Promise.resolve(onCapture(file))
@@ -140,7 +142,7 @@ export const CameraModal = ({ isOpen, onClose, onCapture }: CameraModalProps) =>
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex flex-col items-center justify-center">
       <div className="relative w-full max-w-md mx-auto">
-        <Button 
+        <Button
           className="absolute right-4 top-4 rounded-full p-2 bg-black bg-opacity-40 text-white z-10"
           onClick={(e) => {
             e.preventDefault();
@@ -152,23 +154,23 @@ export const CameraModal = ({ isOpen, onClose, onCapture }: CameraModalProps) =>
         >
           <CrossIcon />
         </Button>
-        
+
         <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
           <video
             ref={videoRef}
             autoPlay
             playsInline
             muted
-            className="w-full h-full object-cover"
+            className="size-full object-cover"
           />
         </div>
-        
+
         <canvas ref={canvasRef} className="hidden" /> {/* Hidden canvas for capturing */}
-        
+
         <div className="flex justify-center mt-6 pb-8">
           <Button
             onClick={captureImage}
-            className="rounded-full w-16 h-16 bg-white border-4 border-primary"
+            className="rounded-full size-16 bg-white border-4 border-primary"
             type="button"
           >
             <span className="sr-only">Take Photo</span>

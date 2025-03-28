@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import type {
@@ -194,7 +195,7 @@ function PureMultimodalInput({
       // Prevent any form submission behavior
       return new Promise<void>((resolve) => {
         setUploadQueue([file.name]);
-        
+
         try {
           uploadFile(file).then(attachment => {
             if (attachment) {
@@ -203,7 +204,7 @@ function PureMultimodalInput({
                 attachment,
               ]);
             }
-            
+
             // Clear the upload queue and resolve the promise
             setUploadQueue([]);
             resolve();
@@ -302,20 +303,20 @@ function PureMultimodalInput({
       />
 
       {/* Camera Modal */}
-      <CameraModal 
+      <CameraModal
         isOpen={isCameraModalOpen}
         onClose={() => setIsCameraModalOpen(false)}
         onCapture={handleCapturedImage}
       />
 
       <div className="absolute bottom-0 right-10 p-2 w-fit flex flex-row justify-start gap-1" onClick={(e) => e.stopPropagation()}>
-        <CameraButton 
+        <CameraButton
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             setIsCameraModalOpen(true);
-          }} 
-          status={status} 
+          }}
+          status={status}
         />
         <AttachmentsButton fileInputRef={fileInputRef} status={status} />
       </div>

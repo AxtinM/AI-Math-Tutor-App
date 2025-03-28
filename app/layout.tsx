@@ -11,11 +11,11 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "PWA NextJS",
-  description: "It's a simple progressive web application made with NextJS",
+  title: "مساعد الواجبات الذكي",
+  description: "مساعدك الذكي لحل واجباتك المدرسية في مختلف المواد",
   generator: "Next.js",
   manifest: "/manifest.json",
-  keywords: ["nextjs", "next14", "pwa", "next-pwa"],
+  keywords: ["nextjs", "next14", "pwa", "واجبات", "مساعدة دراسية", "ذكاء اصطناعي", "تعليم", "رياضيات", "علوم", "تاريخ", "جغرافيا", "لغات"],
   authors: [
     {
       name: "imvinojanv",
