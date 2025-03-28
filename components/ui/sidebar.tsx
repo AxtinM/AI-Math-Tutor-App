@@ -774,7 +774,7 @@ const SidebarMenuSubButton = React.forwardRef<
         'data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground',
         size === 'sm' && 'text-xs',
         size === 'md' && 'text-sm',
-        isRtl && '-translate-x-0 translate-x-px',
+        isRtl && '-translate-x-0',
         className,
       )}
       {...props}

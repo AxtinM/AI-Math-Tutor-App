@@ -187,7 +187,6 @@ const CodeArtifactDisplay: React.FC<{
   version,
   ...props // Capture other potential props
 }) => {
-  const [showCode, setShowCode] = React.useState(false);
   const hasRun = useRef(false);
 
   useEffect(() => {
