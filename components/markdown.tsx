@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable import/no-named-as-default-member */
 import Link from 'next/link';
 import React, { memo, useEffect, useState } from 'react';
