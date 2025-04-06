@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Toaster } from 'sonner';
 import Script from 'next/script';
-
+import { GoogleTagManager } from '@next/third-parties/google'
 import { ThemeProvider } from '@/components/theme-provider';
 import DecorativePattern from '@/components/decorative-pattern';
 import './globals.css';
@@ -60,6 +60,7 @@ export default async function RootLayout({
           </div>
         </ThemeProvider>
       </body>
+      <GoogleTagManager gtmId='G-80F0MYRQ99' />
     </html>
   );
 }
