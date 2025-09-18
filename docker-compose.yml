@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: ai-math-tutor-db
+    environment:
+      POSTGRES_USER: aiuser
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: aimathtutor
+    ports:
+      - "5433:5432"  # Using port 5433 instead of the usual 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aiuser -d aimathtutor"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
