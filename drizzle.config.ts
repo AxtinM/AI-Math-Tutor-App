@@ -11,9 +11,6 @@ export default defineConfig({
   dialect: 'postgresql',
   dbCredentials: {
     // biome-ignore lint: Forbidden non-null assertion.
-    url: process.env.POSTGRES_URL!,
-    password: "motdepasse",
-    database: "mabase",
-    user: "utilisateur",
+    url: process.env.DATABASE_URL!,
   },
 });

@@ -12,11 +12,8 @@ const runMigrate = async () => {
     throw new Error('POSTGRES_URL is not defined');
   }
 
-  const connection = postgres(process.env.POSTGRES_URL, {
+  const connection = postgres(process.env.DATABASE_URL!, {
     max: 1,
-    password: "motdepasse",
-    database: "mabase",
-    user: "utilisateur",
   });
   const db = drizzle(connection);
 
